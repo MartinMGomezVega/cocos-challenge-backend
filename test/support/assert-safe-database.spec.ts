@@ -11,18 +11,27 @@ describe('assertSafeDatabase', () => {
     expect(() => assertSafeDatabase('not-a-valid-url')).toThrow(/DATABASE_URL/);
   });
 
-  it('aborts if DATABASE_URL host contains neon.tech', () => {
+  it('aborts if DATABASE_URL host is not localhost or 127.0.0.1', () => {
     expect(() =>
       assertSafeDatabase('postgresql://u:p@ep-cool-sky-123.neon.tech/neondb'),
-    ).toThrow(/neon\.tech/i);
+    ).toThrow(/localhost|127\.0\.0\.1/);
     expect(() =>
       assertSafeDatabase('postgresql://u:p@NEON.TECH:5432/neondb'),
-    ).toThrow(/neon\.tech/i);
+    ).toThrow(/localhost|127\.0\.0\.1/);
+    expect(() =>
+      assertSafeDatabase('postgresql://u:p@db.production.internal:5432/app'),
+    ).toThrow(/localhost|127\.0\.0\.1/);
+    expect(() =>
+      assertSafeDatabase('postgresql://u:p@192.168.1.10:5432/app'),
+    ).toThrow(/localhost|127\.0\.0\.1/);
   });
 
-  it('passes for localhost and 127.0.0.1', () => {
+  it('passes for localhost and 127.0.0.1 (case-insensitive)', () => {
     expect(() =>
       assertSafeDatabase('postgresql://cocos:cocos@localhost:5433/cocos_test'),
+    ).not.toThrow();
+    expect(() =>
+      assertSafeDatabase('postgresql://cocos:cocos@LOCALHOST:5433/cocos_test'),
     ).not.toThrow();
     expect(() =>
       assertSafeDatabase('postgresql://cocos:cocos@127.0.0.1:5433/cocos_test'),

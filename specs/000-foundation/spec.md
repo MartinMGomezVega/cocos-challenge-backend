@@ -62,7 +62,7 @@ Esta fase **no expone ningún endpoint de negocio**.
 
 - `docker compose up -d db-test` levanta un Postgres local y carga `database/database.sql` al crearse.
 - `.env.test` apunta a esa base y se versiona (no contiene secretos).
-- El arranque de los tests **aborta** si `DATABASE_URL` no está definida o si el host contiene `neon.tech` (`test/support/assert-safe-database.ts` como función pura y `test/support/global-setup.ts` conectado al `globalSetup` de ambas suites de Jest, cargando `.env.test` con `process.loadEnvFile` cuando `DATABASE_URL` no está definida).
+- El arranque de los tests **aborta** si `DATABASE_URL` no está definida o si el host no es `localhost` ni `127.0.0.1` (`test/support/assert-safe-database.ts` como función pura y `test/support/global-setup.ts` conectado al `globalSetup` de ambas suites de Jest, cargando `.env.test` con `process.loadEnvFile` cuando `DATABASE_URL` no está definida).
 - Cada test que toca la base deja la base como la encontró (transacción con rollback o limpieza de lo insertado).
 - Los tests que necesitan la base (`src/infrastructure/**/*.int-spec.ts` y `test/functional/*.spec.ts`) corren en serie (`maxWorkers: 1`) porque comparten la base de test.
 
@@ -87,6 +87,6 @@ Esta fase **no expone ningún endpoint de negocio**.
 | CA5 | La fila de marketdata del instrumento 47 con fecha 2023-07-14 se lee con `close = 925.85` y `previousClose = 921.80`. |
 | CA6 | Una fila de marketdata con `high` en `NULL` se lee con `high = null`, sin error. |
 | CA7 | `Money` cumple R3, con 100 % de coverage. |
-| CA8 | Los tests no arrancan si `DATABASE_URL` apunta a `neon.tech`. |
+| CA8 | Los tests no arrancan si `DATABASE_URL` apunta a un host distinto de `localhost` o `127.0.0.1` (por ejemplo, `neon.tech`). |
 | CA9 | `npm run lint`, `npm test` y `npm run test:functional` pasan; `npm run test:cov` cumple los umbrales. |
 | CA10 | `git grep` no encuentra la contraseña ni el host de Neon en el repo. |
