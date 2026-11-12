@@ -5,7 +5,7 @@ Una por vez y en orden. En las tareas **TDD**, primero el test en rojo. Un commi
 - [x] **T1. Pesos disponibles (TDD).** `account-movement.ts` y `cash-calculator.ts`. Casos: los movimientos `FILLED` del usuario 1 dan 753000; un caso por cada `side`; lista vacía da 0; resultado negativo permitido.
   Commit: `feat: add available cash calculator`
 
-- [ ] **T2. Tenencias (TDD).** `position-calculator.ts`. Casos: usuario 1 (PAMP 40, METR 500, BMA −10); precio promedio ponderado (CA11); venta total excluye la posición; las transferencias no generan tenencia; sin compras el precio promedio es `null`.
+- [x] **T2. Tenencias (TDD).** `position-calculator.ts`. Casos: usuario 1 (PAMP 40, METR 500, BMA −10); precio promedio ponderado (CA11); venta total excluye la posición; las transferencias no generan tenencia; sin compras el precio promedio es `null`.
   Commit: `feat: add holdings calculator`
 
 - [ ] **T3. Valuación (TDD).** `portfolio.ts`. Casos: usuario 1 completo (CA1 a CA4, total 889756); posición negativa con rendimiento `null`; instrumento sin precio (CA12); exclusión de `MONEDA`; orden por ticker; cuenta vacía.
