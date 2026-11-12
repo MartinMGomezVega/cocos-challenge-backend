@@ -44,3 +44,11 @@ export function shouldUseDatabaseSsl(databaseUrl: string): boolean {
   const { hostname } = new URL(databaseUrl);
   return !LOCAL_HOSTS.has(hostname.toLowerCase());
 }
+
+export function getDatabaseSslConfig(
+  databaseUrl: string,
+): { rejectUnauthorized: true } | false {
+  return shouldUseDatabaseSsl(databaseUrl)
+    ? { rejectUnauthorized: true }
+    : false;
+}

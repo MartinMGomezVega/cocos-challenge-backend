@@ -1,4 +1,8 @@
-import { shouldUseDatabaseSsl, validateEnv } from './env.validation';
+import {
+  getDatabaseSslConfig,
+  shouldUseDatabaseSsl,
+  validateEnv,
+} from './env.validation';
 
 describe('validateEnv', () => {
   it('throws an error mentioning DATABASE_URL when DATABASE_URL is missing or empty', () => {
@@ -90,5 +94,29 @@ describe('shouldUseDatabaseSsl', () => {
     expect(
       shouldUseDatabaseSsl('postgresql://user:pass@10.0.0.5:5432/prod'),
     ).toBe(true);
+  });
+});
+
+describe('getDatabaseSslConfig', () => {
+  it('returns false for local hosts', () => {
+    expect(
+      getDatabaseSslConfig(
+        'postgresql://cocos:cocos@localhost:5433/cocos_test',
+      ),
+    ).toBe(false);
+    expect(
+      getDatabaseSslConfig(
+        'postgresql://cocos:cocos@127.0.0.1:5433/cocos_test',
+      ),
+    ).toBe(false);
+  });
+
+  it('returns { rejectUnauthorized: true } for non-local hosts', () => {
+    expect(
+      getDatabaseSslConfig('postgresql://user:pass@db.example.com:5432/prod'),
+    ).toEqual({ rejectUnauthorized: true });
+    expect(
+      getDatabaseSslConfig('postgresql://user:pass@10.0.0.5:5432/prod'),
+    ).toEqual({ rejectUnauthorized: true });
   });
 });

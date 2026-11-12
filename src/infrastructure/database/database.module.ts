@@ -5,7 +5,7 @@ import { InstrumentEntity } from '../entities/instrument.entity';
 import { MarketDataEntity } from '../entities/market-data.entity';
 import { OrderEntity } from '../entities/order.entity';
 import { UserEntity } from '../entities/user.entity';
-import { shouldUseDatabaseSsl, validateEnv } from './env.validation';
+import { getDatabaseSslConfig, validateEnv } from './env.validation';
 
 @Global()
 @Module({
@@ -24,9 +24,7 @@ import { shouldUseDatabaseSsl, validateEnv } from './env.validation';
           url,
           synchronize: false,
           autoLoadEntities: true,
-          ssl: shouldUseDatabaseSsl(url)
-            ? { rejectUnauthorized: false }
-            : false,
+          ssl: getDatabaseSslConfig(url),
         };
       },
     }),
