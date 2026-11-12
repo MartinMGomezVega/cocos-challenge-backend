@@ -8,7 +8,7 @@ Una por vez y en orden. En las tareas **TDD**, primero el test en rojo. Un commi
 - [x] **T2. Formato de decimales (TDD).** `decimal-format.ts` con sus tests (half-up, empates que se alejan del cero, nunca `"-0.00"`). Refactor de `Money.toFixed2()` para delegar, con sus tests existentes en verde y sin modificarlos.
   Commit: `refactor: share two-decimal formatting`
 
-- [ ] **T3. Dominio (TDD).** `MarketPrice` con `dailyReturn()` e `Instrument`. Casos: PAMP (925.85 y 921.80 → 0.44 al formatear), METR (−1.08), BMA (−1.15), `previousClose` `null`, `previousClose` 0.
+- [x] **T3. Dominio (TDD).** `MarketPrice` con `dailyReturn()` e `Instrument`. Casos: PAMP (925.85 y 921.80 → 0.44 al formatear), METR (−1.08), BMA (−1.15), `previousClose` `null`, `previousClose` 0.
   Commit: `feat: add instrument and market price domain`
 
 - [ ] **T4. Caso de uso (TDD).** Puerto `InstrumentRepository` y `SearchInstrumentsUseCase` con un repositorio falso en memoria. Casos: `totalPages` con 65 y límite 20 (4), con total 0 (0), con división exacta, y que `query`, `page` y `limit` lleguen al puerto sin alterarse.
