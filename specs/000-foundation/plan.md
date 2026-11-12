@@ -1,0 +1,63 @@
+# Plan 000 — Foundation
+
+Cómo se implementa `spec.md`. Respeta `AGENTS.md`.
+
+## Dependencias
+
+| Paquete | Para qué |
+|---|---|
+| `@nestjs/common`, `@nestjs/core`, `@nestjs/platform-express` | Framework |
+| `reflect-metadata`, `rxjs` | Dependencias obligatorias (peer) de NestJS |
+| `@nestjs/config` | Variables de entorno |
+| `@nestjs/typeorm`, `typeorm`, `pg` | Acceso a datos |
+| `decimal.js` | Dinero y porcentajes |
+| `class-validator`, `class-transformer` | Validación de DTOs y de la configuración |
+| `typescript`, `@nestjs/cli`, `@nestjs/schematics` (dev) | Compilación, `nest build` / `nest start` y `nest-cli.json` |
+| `jest`, `ts-jest`, `supertest`, `@nestjs/testing` (dev) | Tests |
+| `ts-node` (dev) | Necesario para que Jest lea `jest.config.ts` |
+| `eslint`, `prettier` (dev) | Calidad |
+| `typescript-eslint`, `@eslint/js`, `globals`, `eslint-config-prettier`, `eslint-plugin-prettier` (dev) | Configuración de ESLint para TypeScript + Prettier |
+| `@types/node`, `@types/express`, `@types/jest`, `@types/supertest` (dev) | Tipos |
+
+## Archivos a crear
+
+```
+.nvmrc                                # versión de Node LTS (v26.13.1)
+.env.example
+.env.test
+.gitignore
+docker-compose.yml
+database/database.sql                 # copiado del repo de Cocos
+jest.config.ts                        # suite unitaria + coverage
+test/jest-functional.config.ts        # suite funcional
+test/support/assert-safe-database.ts  # aborta si el host es neon.tech
+test/support/test-app.ts              # arma la app Nest para tests
+src/main.ts
+src/app.module.ts
+src/domain/shared/money.ts
+src/domain/shared/domain-error.ts
+src/infrastructure/database/env.validation.ts
+src/infrastructure/database/database.module.ts
+src/infrastructure/database/decimal.transformer.ts
+src/infrastructure/entities/user.entity.ts
+src/infrastructure/entities/instrument.entity.ts
+src/infrastructure/entities/order.entity.ts
+src/infrastructure/entities/market-data.entity.ts
+src/presentation/filters/domain-error.filter.ts
+```
+
+## Decisiones técnicas
+
+- **Versionado:** `app.enableVersioning({ type: VersioningType.URI })` con versión por defecto `1`, para que todas las rutas queden bajo `/v1`.
+- **Validación global:** `ValidationPipe` con `whitelist`, `forbidNonWhitelisted` y `transform`.
+- **Configuración:** `ConfigModule.forRoot` con una función `validate` que exige `DATABASE_URL`. En tests carga `.env.test`.
+- **SSL:** activado salvo que el host sea `localhost` o `127.0.0.1`.
+- **Transformer decimal:** `from: (v) => v === null ? null : new Decimal(v)`, `to: (v) => v === null ? null : v.toString()`.
+- **Mapeo de columnas:** `@Column({ name: 'instrumentid' })` en cada propiedad camelCase; `@PrimaryGeneratedColumn()` para `id`.
+- **Base de test:** servicio `db-test` en `docker-compose.yml` con imagen `postgres:16`, puerto 5433, y `database/database.sql` montado en `/docker-entrypoint-initdb.d/`.
+- **Guardia de seguridad:** `assert-safe-database.ts` se ejecuta en el `globalSetup` de ambas suites.
+- **Aislamiento:** los tests que escriben borran en `afterEach` las filas con `id` mayor al máximo de los datos provistos (órdenes con `id > 11`).
+
+## Riesgo a verificar
+
+El `database.sql` del repo de Cocos puede no coincidir exactamente con la base de Neon. Tras cargarlo en local, comparar contra `specs/domain-context.md` (CA3, CA4, CA5). Si difiere, frenar y avisar antes de seguir.
