@@ -24,10 +24,11 @@ src/
 │   ├── database/      # configuración de TypeORM
 │   ├── entities/      # *.entity.ts
 │   └── repositories/  # implementaciones TypeORM de los puertos
-└── presentation/
-    ├── controllers/
-    ├── dto/
-    └── filters/       # errores de dominio → HTTP
+├── presentation/
+│   ├── controllers/
+│   ├── dto/
+│   └── filters/       # errores de dominio → HTTP
+└── composition/       # módulos NestJS que conectan puertos, repositorios, casos de uso y controllers
 test/
 ├── functional/        # tests HTTP de punta a punta
 └── support/           # arranque de la base de test

@@ -17,7 +17,7 @@ Una por vez y en orden. En las tareas **TDD**, primero el test en rojo. Un commi
 - [x] **T5. Repositorio (TDD).** `typeorm-instrument.repository.int-spec.ts` contra la base de test y luego la implementación. Casos: coincidencia por ticker, por nombre, sin distinguir mayúsculas, exclusión de `MONEDA`, orden, paginado, total, comodines escapados (`%` y `_`), activos sin datos de mercado y uso de la fecha más reciente.
   Commit: `feat: add typeorm instrument repository`
 
-- [ ] **T6. Endpoint (TDD).** `test/functional/instruments.spec.ts` con CA1 a CA12, luego DTOs, controller y `src/composition/instruments.module.ts`. Agregar `src/composition/` a `specs/architecture.md`.
+- [x] **T6. Endpoint (TDD).** `test/functional/instruments.spec.ts` con CA1 a CA12, luego DTOs, controller y `src/composition/instruments.module.ts`. Agregar `src/composition/` a `specs/architecture.md`.
   Commit: `feat: add search instruments endpoint`
 
 - [ ] **T7. Ejemplos y verificación.** `http/instruments.http` con un pedido por cada caso relevante (búsqueda por ticker, por nombre, paginado, sin resultados, error 400). Correr lint, las tres suites y el build. Cubre CA14.
