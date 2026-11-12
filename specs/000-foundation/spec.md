@@ -60,6 +60,7 @@ Esta fase **no expone ningún endpoint de negocio**.
 - `.env.test` apunta a esa base y se versiona (no contiene secretos).
 - El arranque de los tests **aborta** si el host de `DATABASE_URL` contiene `neon.tech`.
 - Cada test funcional deja la base como la encontró (transacción con rollback o limpieza de lo insertado).
+- Los tests funcionales corren en serie (`maxWorkers: 1`) porque comparten la base de test.
 
 ### R6. Calidad
 
