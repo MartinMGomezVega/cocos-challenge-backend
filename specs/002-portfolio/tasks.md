@@ -8,7 +8,7 @@ Una por vez y en orden. En las tareas **TDD**, primero el test en rojo. Un commi
 - [x] **T2. Tenencias (TDD).** `position-calculator.ts`. Casos: usuario 1 (PAMP 40, METR 500, BMA −10); precio promedio ponderado (CA11); venta total excluye la posición; las transferencias no generan tenencia; sin compras el precio promedio es `null`.
   Commit: `feat: add holdings calculator`
 
-- [ ] **T3. Valuación (TDD).** `portfolio.ts`. Casos: usuario 1 completo (CA1 a CA4, total 889756); posición negativa con rendimiento `null`; instrumento sin precio (CA12); exclusión de `MONEDA`; orden por ticker; cuenta vacía.
+- [x] **T3. Valuación (TDD).** `portfolio.ts`. Casos: usuario 1 completo (CA1 a CA4, total 889756); posición negativa con rendimiento `null`; instrumento sin precio (CA12); exclusión de `MONEDA`; orden por ticker; cuenta vacía.
   Commit: `feat: add portfolio valuation`
 
 - [ ] **T4. Caso de uso (TDD).** Puertos `UserRepository` y `OrderRepository`, `findByIds` en `InstrumentRepository`, y `GetPortfolioUseCase` con repositorios falsos. Casos: usuario inexistente lanza `USER_NOT_FOUND`; usuario sin órdenes; flujo completo.
