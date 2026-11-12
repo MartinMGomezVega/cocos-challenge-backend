@@ -15,6 +15,7 @@ const config: Config = {
   collectCoverageFrom: [
     'src/**/*.ts',
     '!src/**/*.spec.ts',
+    '!src/**/*.int-spec.ts',
     '!src/main.ts',
     '!src/**/*.module.ts',
     '!src/**/*.entity.ts',

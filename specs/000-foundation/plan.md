@@ -28,8 +28,9 @@ Cómo se implementa `spec.md`. Respeta `specs/architecture.md`.
 .gitignore
 docker-compose.yml
 database/database.sql                 # copiado del repo de Cocos
-jest.config.ts                        # suite unitaria + coverage
-test/jest-functional.config.ts        # suite funcional
+jest.config.ts                        # suite unitaria + umbrales de coverage
+test/jest-functional.config.ts        # suite con base local (*.int-spec.ts + test/functional/*.spec.ts)
+test/jest-cov.config.ts               # suite completa para coverage combinado de src
 test/support/assert-safe-database.ts  # función pura: aborta sin DATABASE_URL o si el host es neon.tech
 test/support/global-setup.ts          # globalSetup de Jest: carga .env.test y ejecuta assertSafeDatabase
 test/support/test-app.ts              # arma la app Nest para tests

@@ -63,15 +63,18 @@ Esta fase **no expone ningún endpoint de negocio**.
 - `docker compose up -d db-test` levanta un Postgres local y carga `database/database.sql` al crearse.
 - `.env.test` apunta a esa base y se versiona (no contiene secretos).
 - El arranque de los tests **aborta** si `DATABASE_URL` no está definida o si el host contiene `neon.tech` (`test/support/assert-safe-database.ts` como función pura y `test/support/global-setup.ts` conectado al `globalSetup` de ambas suites de Jest, cargando `.env.test` con `process.loadEnvFile` cuando `DATABASE_URL` no está definida).
-- Cada test funcional deja la base como la encontró (transacción con rollback o limpieza de lo insertado).
-- Los tests funcionales corren en serie (`maxWorkers: 1`) porque comparten la base de test.
+- Cada test que toca la base deja la base como la encontró (transacción con rollback o limpieza de lo insertado).
+- Los tests que necesitan la base (`src/infrastructure/**/*.int-spec.ts` y `test/functional/*.spec.ts`) corren en serie (`maxWorkers: 1`) porque comparten la base de test.
 
 ### R6. Calidad
 
 - Scripts: `start:dev`, `build`, `lint`, `lint:fix`, `test`, `test:functional`, `test:cov`.
+- `npm test`: corre solo tests unitarios puros (`src/**/*.spec.ts` y `test/support/**/*.spec.ts`), sin requerir Docker.
+- `npm run test:functional`: corre los tests que usan la base local (`src/**/*.int-spec.ts` y `test/functional/*.spec.ts`), en serie.
+- `npm run test:cov`: corre todos los tests (unitarios + integración + funcionales) y aplica los umbrales sobre el coverage combinado de `src`.
 - `lint` solo verifica (sin `--fix`); `lint:fix` corrige.
 - ESLint marca como **error** `@typescript-eslint/no-explicit-any`, `@typescript-eslint/no-floating-promises` y `@typescript-eslint/no-unsafe-argument`.
-- Umbrales de coverage: 90 % global y 100 % en `src/domain`. Excluidos: `main.ts`, `*.module.ts`, `*.entity.ts`, `*.dto.ts`.
+- Umbrales de coverage: 90 % global y 100 % en `src/domain`. Excluidos: `main.ts`, `*.module.ts`, `*.entity.ts`, `*.dto.ts`, `*.spec.ts`, `*.int-spec.ts`.
 
 ## Criterios de aceptación
 

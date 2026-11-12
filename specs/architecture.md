@@ -75,7 +75,8 @@ Ciclo por cada tarea: **test en rojo → código mínimo en verde → refactor**
 |---|---|---|
 | Dominio | `src/domain/**/*.spec.ts` | Tests puros, sin mocks |
 | Casos de uso | `src/application/**/*.spec.ts` | Repositorios falsos en memoria |
-| Infraestructura | `src/infrastructure/**/*.spec.ts` | Postgres local |
+| Infraestructura (unitarios) | `src/infrastructure/**/*.spec.ts` | Tests puros, sin Docker |
+| Infraestructura (base de datos) | `src/infrastructure/**/*.int-spec.ts` | Postgres local |
 | Funcional | `test/functional/*.spec.ts` | Supertest + Postgres local |
 
-Coverage mínimo (el build falla si baja): 90 % global, 100 % en `src/domain`. Excluidos: `main.ts`, `*.module.ts`, `*.entity.ts`, `*.dto.ts`.
+Coverage mínimo (el build falla si baja): 90 % global, 100 % en `src/domain`, calculado sobre el coverage combinado de `src` (excluidos: `main.ts`, `*.module.ts`, `*.entity.ts`, `*.dto.ts`, `*.spec.ts`, `*.int-spec.ts`).
