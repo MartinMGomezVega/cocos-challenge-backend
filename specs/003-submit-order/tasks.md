@@ -14,5 +14,5 @@ Una por vez y en orden. En las tareas **TDD**, primero el test en rojo. Un commi
 - [x] **T4. Endpoint (TDD).** `test/functional/orders.spec.ts` con CA1 a CA29; luego DTOs, controller y `src/composition/orders.module.ts`. Los casos que verifican el portfolio lo consultan por HTTP después de enviar la orden.
   Commit: `feat: add submit order endpoint`
 
-- [x] **T5. Ejemplos y verificación.** `http/orders.http` (MARKET por cantidad, MARKET por monto, LIMIT, orden rechazada, error de validación). Correr lint, las tres suites y el build. Cubre CA30.
+- [x] **T5. Ejemplos y verificación.** `postman/cocos-challenge-backend.postman_collection.json` (MARKET por cantidad, MARKET por monto, LIMIT, orden rechazada, error de validación). Correr lint, las tres suites y el build. Cubre CA30.
   Commit: `docs: add orders http examples`

@@ -68,14 +68,13 @@ La API queda en `http://localhost:3000`. Para correr la versión compilada: `npm
 | `POST /v1/orders` | Envía una orden de compra o venta, MARKET o LIMIT |
 | `PATCH /v1/orders/:orderId/cancel` | Cancela una orden en estado `NEW` |
 
-Para probarlos y consultarlos hay cuatro recursos en el repo:
+Para probarlos y consultarlos hay tres recursos en el repo:
 
 | Recurso | Ubicación | Cómo usarlo |
 |---|---|---|
 | Colección de Postman | [`postman/cocos-challenge-backend.postman_collection.json`](postman/cocos-challenge-backend.postman_collection.json) | Importar en Postman. La variable `baseUrl` apunta a `http://localhost:3000` |
 | Especificación OpenAPI 3 | [`openapi/openapi.yaml`](openapi/openapi.yaml) | Abrir en [editor.swagger.io](https://editor.swagger.io) o con cualquier visor de OpenAPI |
 | Swagger UI (GitHub Pages) | [`docs/`](docs/) | Abrir [`docs/index.html`](docs/index.html) o publicar desde GitHub Pages |
-| Ejemplos REST Client | [`http/`](http/) | Ejecutar desde el editor con la extensión REST Client |
 
 ### Portfolio
 

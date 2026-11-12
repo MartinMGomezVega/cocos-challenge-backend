@@ -13,7 +13,7 @@ src/presentation/dto/order-id.param.dto.ts
 src/presentation/controllers/orders.controller.ts             # se agrega el PATCH
 src/composition/orders.module.ts                              # se registra el caso de uso
 test/functional/cancel-order.spec.ts
-http/orders.http                                              # se agregan ejemplos
+postman/cocos-challenge-backend.postman_collection.json       # se agregan ejemplos
 ```
 
 ## Decisiones técnicas

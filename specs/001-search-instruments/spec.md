@@ -12,7 +12,7 @@ Cubre el punto "Buscar activos" del enunciado y las consideraciones sobre precio
 2. Cálculo del retorno diario en el dominio.
 3. Formato común de decimales para montos y porcentajes.
 4. Comprobación de que la base de test responde antes de correr la suite funcional.
-5. Archivo de ejemplos `http/instruments.http`.
+5. Ejemplos en `postman/cocos-challenge-backend.postman_collection.json`.
 
 ## Fuera de alcance
 

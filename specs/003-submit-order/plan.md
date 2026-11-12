@@ -17,7 +17,7 @@ src/presentation/dto/order.response.dto.ts
 src/presentation/controllers/orders.controller.ts
 src/composition/orders.module.ts
 test/functional/orders.spec.ts               # el test funcional que pide el enunciado
-http/orders.http
+postman/cocos-challenge-backend.postman_collection.json
 ```
 
 ## Decisiones técnicas

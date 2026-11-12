@@ -18,7 +18,7 @@ src/composition/instruments.module.ts        # cableado NestJS de la funcionalid
 test/support/assert-database-reachable.ts
 test/support/global-setup-db.ts
 test/functional/instruments.spec.ts
-http/instruments.http
+postman/cocos-challenge-backend.postman_collection.json
 ```
 
 ## Decisiones técnicas

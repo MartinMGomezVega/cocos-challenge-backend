@@ -22,7 +22,7 @@ src/presentation/controllers/portfolio.controller.ts
 src/composition/portfolio.module.ts
 test/functional/portfolio.spec.ts
 test/support/order-fixtures.ts               # insertar y limpiar órdenes de prueba
-http/portfolio.http
+postman/cocos-challenge-backend.postman_collection.json
 ```
 
 ## Decisiones técnicas
