@@ -1,65 +1,23 @@
 # cocos-challenge-backend
 
-API REST que resuelve el [backend challenge de Cocos Capital](specs/backend-challenge.md): portfolio de un usuario, búsqueda de activos y envío de órdenes al mercado. Suma un cuarto endpoint para cancelar órdenes.
+Mi resolución del [backend challenge de Cocos Capital](specs/backend-challenge.md). Es una API REST con los tres endpoints que pide el enunciado (portfolio, búsqueda de activos y envío de órdenes) y un cuarto que sumé para cancelar órdenes.
 
-- **Stack:** Node.js 26, NestJS 11, TypeScript estricto, PostgreSQL, TypeORM.
-- **Tests:** 219, con 100 % de coverage.
-- **Documentación de diseño:** carpeta [`specs/`](specs/), con una especificación por funcionalidad.
+Está hecha con Node.js 26, NestJS 11, TypeScript, PostgreSQL y TypeORM. Tiene 219 tests y 100 % de coverage.
 
-## Cómo ejecutarlo
+## Documentación de la API
 
-Requisitos: Node.js 26 (hay un `.nvmrc`) y npm. Docker solo hace falta para correr los tests.
+La forma más rápida de ver qué hace cada endpoint, sin instalar nada:
 
-```bash
-nvm use
-npm install
-cp .env.example .env
-```
+**https://martinmgomezvega.github.io/cocos-challenge-backend/**
 
-La API necesita una base PostgreSQL con el esquema y los datos del challenge. Se configura con la variable `DATABASE_URL` del archivo `.env`, y hay dos formas de hacerlo.
+Es un Swagger con los cuatro endpoints, sus parámetros, respuestas y errores. Además dejé en el repo:
 
-### Opción A: la base provista por Cocos
+| Recurso | Dónde está | Para qué |
+|---|---|---|
+| Colección de Postman | [`postman/cocos-challenge-backend.postman_collection.json`](postman/cocos-challenge-backend.postman_collection.json) | Se importa en Postman y ya trae 23 pedidos armados, con casos correctos y de error |
+| Especificación OpenAPI 3 | [`openapi/openapi.yaml`](openapi/openapi.yaml) | Es el archivo que alimenta el Swagger de arriba |
 
-Completar `DATABASE_URL` en `.env` con el connection string entregado junto con el challenge:
-
-```
-DATABASE_URL=postgresql://USUARIO:CONTRASEÑA@HOST/BASE?sslmode=require
-PORT=3000
-```
-
-La conexión usa SSL de forma automática cuando el host no es local. Tener en cuenta que `POST /v1/orders` y `PATCH /v1/orders/:orderId/cancel` escriben en esa base.
-
-### Opción B: una base local con Docker
-
-El repo incluye los datos del challenge en `database/database.sql` y un `docker-compose.yml` que levanta un PostgreSQL ya cargado con ellos:
-
-```bash
-docker compose up -d db-test
-```
-
-Completar `.env` con:
-
-```
-DATABASE_URL=postgresql://cocos:cocos@localhost:5433/cocos_test
-PORT=3000
-```
-
-Es la misma base que usan los tests, y la opción recomendada para probar órdenes sin modificar datos compartidos. Para volver a los datos originales:
-
-```bash
-docker compose down -v
-docker compose up -d db-test
-```
-
-### Levantar la API
-
-```bash
-npm run start:dev
-```
-
-La API queda en `http://localhost:3000`. Para correr la versión compilada: `npm run build` y `npm run start:prod`.
-
-## Endpoints
+### Endpoints
 
 | Método y ruta | Qué hace |
 |---|---|
@@ -67,14 +25,6 @@ La API queda en `http://localhost:3000`. Para correr la versión compilada: `npm
 | `GET /v1/instruments?query=&page=&limit=` | Busca activos por ticker y/o nombre |
 | `POST /v1/orders` | Envía una orden de compra o venta, MARKET o LIMIT |
 | `PATCH /v1/orders/:orderId/cancel` | Cancela una orden en estado `NEW` |
-
-Para probarlos y consultarlos hay tres recursos en el repo:
-
-| Recurso | Ubicación | Cómo usarlo |
-|---|---|---|
-| Colección de Postman | [`postman/cocos-challenge-backend.postman_collection.json`](postman/cocos-challenge-backend.postman_collection.json) | Importar en Postman. La variable `baseUrl` apunta a `http://localhost:3000` |
-| Especificación OpenAPI 3 | [`openapi/openapi.yaml`](openapi/openapi.yaml) | Abrir en [editor.swagger.io](https://editor.swagger.io) o con cualquier visor de OpenAPI |
-| Documentación navegable | https://martinmgomezvega.github.io/cocos-challenge-backend/ | Swagger UI con todos los endpoints, sin instalar nada |
 
 ### Portfolio
 
@@ -115,11 +65,9 @@ curl "http://localhost:3000/v1/instruments?query=banco&page=1&limit=10"
 }
 ```
 
-`query` es opcional; sin él se listan todos los activos. `page` arranca en 1 y `limit` va de 1 a 100 (20 por defecto).
+`query` es opcional: si no se manda, lista todos los activos. Está paginado de a 20, con un máximo de 100 por página.
 
 ### Enviar una orden
-
-Los `id` de las respuestas son ilustrativos y dependen del estado de la base.
 
 ```bash
 # MARKET por cantidad de acciones
@@ -134,7 +82,7 @@ curl -X POST http://localhost:3000/v1/orders -H "Content-Type: application/json"
 curl -X POST http://localhost:3000/v1/orders -H "Content-Type: application/json" \
   -d '{"userId":1,"instrumentId":47,"side":"SELL","type":"LIMIT","size":5,"price":950.50}'
 
-# Orden que queda REJECTED: vende más acciones de las que tiene
+# Queda REJECTED: quiere vender más acciones de las que tiene
 curl -X POST http://localhost:3000/v1/orders -H "Content-Type: application/json" \
   -d '{"userId":1,"instrumentId":47,"side":"SELL","type":"MARKET","size":200}'
 ```
@@ -147,13 +95,15 @@ curl -X POST http://localhost:3000/v1/orders -H "Content-Type: application/json"
 }
 ```
 
+El `id` del ejemplo es ilustrativo; depende de cuántas órdenes haya en la base.
+
 | Campo | Regla |
 |---|---|
 | `userId`, `instrumentId` | Enteros, obligatorios |
 | `side` | `BUY` o `SELL` |
 | `type` | `MARKET` o `LIMIT` |
-| `size` o `amount` | Exactamente uno: cantidad de acciones, o monto en pesos |
-| `price` | Obligatorio en `LIMIT`; no se admite en `MARKET` |
+| `size` o `amount` | Uno de los dos, nunca ambos: cantidad de acciones o monto en pesos |
+| `price` | Obligatorio en `LIMIT`; en `MARKET` no se admite |
 
 ### Cancelar una orden
 
@@ -161,7 +111,7 @@ curl -X POST http://localhost:3000/v1/orders -H "Content-Type: application/json"
 curl -X PATCH http://localhost:3000/v1/orders/<orderId>/cancel
 ```
 
-Donde `<orderId>` es el `id` devuelto al crear una orden `LIMIT`. Devuelve la orden con `status` `CANCELLED`. Solo se pueden cancelar órdenes en `NEW`.
+`<orderId>` es el `id` que devuelve el `POST` al crear una orden `LIMIT`. Solo se pueden cancelar órdenes en `NEW`.
 
 ### Errores
 
@@ -171,95 +121,159 @@ Los errores de negocio responden `{ "code", "message" }`:
 |---|---|---|
 | 400 | `INSTRUMENT_NOT_TRADABLE` | Orden sobre ARS, que es la moneda |
 | 404 | `USER_NOT_FOUND`, `INSTRUMENT_NOT_FOUND`, `ORDER_NOT_FOUND` | El recurso no existe |
-| 409 | `ORDER_NOT_CANCELLABLE` | Cancelar una orden que no está en `NEW` |
+| 409 | `ORDER_NOT_CANCELLABLE` | Se quiere cancelar una orden que no está en `NEW` |
 | 422 | `MARKET_PRICE_UNAVAILABLE` | Orden MARKET sobre un activo sin precio |
 
-Un pedido mal formado devuelve 400 con el detalle de los campos inválidos.
+Si el pedido está mal formado, devuelve 400 con el detalle de los campos inválidos.
+
+## Cómo levantarlo
+
+Hace falta Node.js 26 (dejé un `.nvmrc`) y npm. Docker solo se necesita para correr los tests o para usar la base local.
+
+```bash
+nvm use
+npm install
+cp .env.example .env
+```
+
+La API necesita una base PostgreSQL con el esquema y los datos del challenge. Se configura con `DATABASE_URL` en el `.env`, y hay dos opciones.
+
+### Opción A: la base que me pasaron ustedes
+
+Poner en `.env` el connection string que venía en el mail del challenge:
+
+```
+DATABASE_URL=postgresql://USUARIO:CONTRASEÑA@HOST/BASE?sslmode=require
+PORT=3000
+```
+
+Ojo que `POST /v1/orders` y `PATCH /v1/orders/:orderId/cancel` escriben en esa base, que es compartida.
+
+### Opción B: una base local con Docker
+
+Dejé en el repo los datos del challenge (`database/database.sql`) y un `docker-compose.yml` que levanta un PostgreSQL ya cargado:
+
+```bash
+docker compose up -d db-test
+```
+
+Y en `.env`:
+
+```
+DATABASE_URL=postgresql://cocos:cocos@localhost:5433/cocos_test
+PORT=3000
+```
+
+Es la que recomiendo para probar órdenes, porque no toca datos compartidos. Para volver a los datos originales:
+
+```bash
+docker compose down -v
+docker compose up -d db-test
+```
+
+### Levantar la API
+
+```bash
+npm run start:dev
+```
+
+Queda en `http://localhost:3000`. Para correr la versión compilada: `npm run build` y después `npm run start:prod`.
 
 ## Tests
 
 ```bash
-npm test                    # unitarios: dominio y casos de uso. No necesita Docker.
+npm test                    # unitarios (dominio y casos de uso). No necesita Docker.
 
 docker compose up -d db-test
 npm run test:functional     # integración y funcionales por HTTP, contra Postgres
-npm run test:cov            # todo, con coverage
+npm run test:cov            # todo junto, con coverage
 ```
 
-- La base de test es un Postgres local en el puerto 5433, cargado con `database/database.sql`.
-- Los tests nunca corren contra la base provista: el arranque aborta si `DATABASE_URL` apunta a ella.
-- El test funcional de envío de órdenes que pide el enunciado está en [`test/functional/orders.spec.ts`](test/functional/orders.spec.ts).
+El test funcional sobre el envío de órdenes que pide el enunciado está en [`test/functional/orders.spec.ts`](test/functional/orders.spec.ts).
 
-## Arquitectura
+Los tests corren siempre contra la base local. Les puse una guardia que corta la ejecución si `DATABASE_URL` apunta a la base compartida, para no ensuciarla por error.
 
-Arquitectura horizontal por capas, con la regla de dependencias de Clean Architecture: todo apunta hacia el dominio.
+## Cómo está armado
+
+Usé una arquitectura horizontal por capas, respetando la regla de dependencias de Clean Architecture: todo depende del dominio y el dominio no depende de nada.
 
 ```
 src/
 ├── domain/           # reglas de negocio puras, sin framework ni base de datos
 ├── application/      # casos de uso y puertos (interfaces de repositorios)
-├── infrastructure/   # TypeORM: entidades y repositorios que implementan los puertos
+├── infrastructure/   # TypeORM: entidades y repositorios
 ├── presentation/     # controllers, DTOs y traducción de errores a HTTP
-└── composition/      # módulos de NestJS que conectan las piezas
+└── composition/      # módulos de NestJS que conectan todo
 ```
 
-Las fórmulas del enunciado (pesos disponibles, tenencia, rendimiento, validación de una orden) son funciones puras en `domain/`, testeadas sin base de datos. El envío de órdenes reutiliza las mismas funciones que el portfolio, así que ambos calculan igual por construcción.
+Las fórmulas del enunciado (pesos disponibles, tenencia, rendimiento, validación de una orden) son funciones puras dentro de `domain/` y se testean sin base de datos. El envío de órdenes usa las mismas funciones que el portfolio, así que no hay forma de que calculen distinto.
 
-## Decisiones de diseño y supuestos
+## Decisiones y supuestos
 
-### Sobre los datos provistos
+El enunciado pide documentar los supuestos. Estos son los que tomé y por qué.
 
-- **El esquema real difiere del enunciado.** Las columnas están en minúsculas (`instrumentid`, `previousclose`) y la fecha de `marketdata` se llama `date`. Las entidades mapean a los nombres reales.
-- **No se modificó el esquema.** No hay tablas, columnas ni índices nuevos; la API funciona contra la base tal como fue entregada.
-- **Posición negativa en BMA.** El usuario 1 tiene una venta `FILLED` de 30 acciones con solo 20 compradas. Es una anomalía de los datos y se muestra tal cual: cantidad −10, valor negativo y rendimiento total `null`. La API no permitiría crear una orden así.
-- **Hay dos acciones sin datos de mercado.** En la búsqueda aparecen con precio `null`; se pueden operar con órdenes LIMIT pero no con MARKET.
+### Sobre los datos
 
-### Cálculos
+Antes de escribir código revisé la base y encontré algunas cosas que no coincidían con el enunciado:
 
-- **Solo las órdenes `FILLED` mueven pesos y tenencia**, como indica el enunciado. Las órdenes `NEW` no reservan pesos ni acciones.
-- **Pesos disponibles** = `CASH_IN` + ventas − `CASH_OUT` − compras, con `size × price` de cada orden.
-- **Rendimiento total (%)** = (último precio − precio promedio de compra) / precio promedio de compra. El enunciado no define la fórmula; se usa el promedio ponderado por cantidad.
-- **Valor total de la cuenta** = pesos disponibles + valor de mercado de todas las posiciones.
-- **Último precio** = el `close` de la fecha más reciente de cada instrumento.
-- **Retorno diario** con `close` y `previousClose`, informado por activo en la búsqueda y en el portfolio.
-- **Dinero sin punto flotante.** Todos los montos, precios y porcentajes se calculan con `decimal.js` y viajan como texto con dos decimales.
+- Las columnas están en minúsculas (`instrumentid`, `previousclose`) y la fecha de `marketdata` se llama `date`, no `datetime`. Mapeé las entidades a los nombres reales.
+- El usuario 1 tiene una posición negativa en BMA: hay una venta `FILLED` de 30 acciones cuando solo había comprado 20. Lo tomé como una anomalía de los datos y la muestro tal cual (cantidad −10, valor negativo y rendimiento `null`). Mi API no dejaría crear una orden así.
+- Hay dos acciones sin datos de mercado. En la búsqueda aparecen con precio `null`, y se pueden operar con LIMIT pero no con MARKET.
 
-### Órdenes
+No modifiqué el esquema. No agregué tablas, columnas ni índices, así que la API funciona contra la base tal como la entregaron.
 
-- **Una orden rechazada devuelve `201`, no un error.** El enunciado pide grabarla en estado `REJECTED`, así que el recurso se crea; el rechazo es un estado de la orden. La respuesta incluye `rejectionReason` (`INSUFFICIENT_FUNDS`, `INSUFFICIENT_SHARES` o `AMOUNT_BELOW_PRICE`), que no se persiste porque la tabla no tiene columna para eso.
-- **Un pedido inválido devuelve un error HTTP y no graba nada.** La diferencia con el punto anterior: acá el pedido está mal formado o apunta a algo que no existe; allá el pedido es válido y el mercado lo rechaza.
-- **Orden por monto:** se calcula la máxima cantidad de acciones enteras, `floor(monto / precio)`. Si no alcanza para una acción, la orden queda `REJECTED`. Se admite en compras y en ventas.
-- **Precio de la orden:** el `close` en MARKET y el precio enviado en LIMIT. Con ese precio se valida y se graba.
-- **ARS no se opera.** Es el instrumento de tipo `MONEDA` que modela los pesos; no aparece en la búsqueda ni como posición.
-- **No se valida horario de mercado ni días hábiles.** El enunciado pide no simular el mercado y los precios provistos son de julio de 2023.
+### Sobre los cálculos
+
+- Solo las órdenes `FILLED` mueven pesos y tenencia, como dice el enunciado. Las `NEW` no reservan nada.
+- Pesos disponibles = `CASH_IN` + ventas − `CASH_OUT` − compras, usando `size × price` de cada orden.
+- Rendimiento total (%) = (último precio − precio promedio de compra) / precio promedio de compra. El enunciado no da la fórmula, así que usé el promedio ponderado por cantidad.
+- Valor total de la cuenta = pesos disponibles + valor de mercado de las posiciones.
+- El último precio es el `close` de la fecha más reciente de cada activo.
+- El retorno diario lo calculo con `close` y `previousClose` y lo devuelvo por activo, en la búsqueda y en el portfolio.
+- No uso punto flotante para dinero. Todos los montos, precios y porcentajes se calculan con `decimal.js` y viajan como texto con dos decimales.
+
+### Sobre las órdenes
+
+- **Una orden rechazada devuelve 201, no un error.** Fue la decisión que más pensé. El enunciado pide guardarla en estado `REJECTED`, o sea que el recurso se crea; el rechazo es un estado de la orden, no una falla del pedido. Para que el cliente sepa el motivo agregué `rejectionReason` en la respuesta (`INSUFFICIENT_FUNDS`, `INSUFFICIENT_SHARES` o `AMOUNT_BELOW_PRICE`). No se guarda en la base porque la tabla no tiene una columna para eso.
+- Distinto es un pedido inválido (mal formado, o sobre un usuario o activo que no existe): ahí sí devuelvo un error HTTP y no se guarda nada.
+- Cuando la orden viene por monto, calculo la máxima cantidad de acciones enteras: `floor(monto / precio)`. Si no alcanza ni para una, queda `REJECTED`. Lo permito tanto en compras como en ventas.
+- El precio de la orden es el `close` en MARKET y el precio enviado en LIMIT. Con ese precio valido y guardo.
+- ARS no se puede operar. Es el instrumento de tipo `MONEDA` que representa los pesos, así que no aparece en la búsqueda ni como posición.
+- No valido horario de mercado ni días hábiles. En un sistema real esa validación existe, pero el enunciado pide no simular el mercado y los precios son de julio de 2023; si la agregaba, la API dejaba de funcionar al probarla fuera de horario.
 
 ### Concurrencia
 
-Los pesos y las acciones disponibles se calculan a partir de las órdenes ejecutadas. Para que dos órdenes simultáneas del mismo usuario no se aprueben contra el mismo saldo, la validación y el grabado ocurren dentro de una transacción que bloquea la fila del usuario (`SELECT … FOR UPDATE`). La segunda orden espera a que termine la primera y valida contra el saldo actualizado.
+Como los pesos y las acciones disponibles se calculan leyendo las órdenes, había un problema: si un usuario manda dos compras al mismo tiempo, las dos leen el mismo saldo y las dos se aprueban, aunque juntas lo superen.
 
-El bloqueo es por usuario, vive en la base de datos (funciona con varias instancias del servicio) y no requiere cambios de esquema. Un test dispara cinco compras simultáneas para un saldo que alcanza para una y verifica que se ejecute exactamente una.
+Lo resolví haciendo la validación y el guardado dentro de una transacción que bloquea la fila del usuario (`SELECT … FOR UPDATE`). La segunda orden espera a que termine la primera y valida contra el saldo ya actualizado. El bloqueo es por usuario, vive en la base (así que funciona aunque haya varias instancias del servicio) y no necesita cambios de esquema.
 
-La cancelación usa una sola sentencia `UPDATE … WHERE status = 'NEW'`, de modo que dos cancelaciones simultáneas no pueden aplicarse ambas.
+Hay un test que dispara cinco compras simultáneas para un saldo que alcanza para una sola y verifica que se ejecute exactamente una.
 
-### Cancelación
+La cancelación es una sola sentencia `UPDATE … WHERE status = 'NEW'`, así que dos cancelaciones simultáneas tampoco pueden aplicarse las dos.
 
-El enunciado define el estado `CANCELLED` y la regla "solo se pueden cancelar las órdenes con estado `NEW`", pero no pide el endpoint. Se agregó para que la regla sea verificable desde la API.
+### Por qué sumé el endpoint de cancelación
 
-## Qué agregaría en producción
+El enunciado define el estado `CANCELLED` y la regla "solo se pueden cancelar las órdenes con estado `NEW`", pero no pide el endpoint. Lo agregué porque sin él esa regla no se podía probar desde la API.
 
-Quedaron fuera a propósito, por estar fuera del alcance del enunciado:
+## Qué le agregaría para producción
 
-- **Idempotencia.** Si un cliente reintenta un pedido por un corte de red, hoy se crean dos órdenes. La solución es una clave única por pedido (`Idempotency-Key`) guardada con un índice único. Exige modificar el esquema y el contrato del endpoint.
-- **Saldos y posiciones materializados.** Recalcular desde las órdenes es correcto y simple para este volumen. Con historiales largos se mantendrían saldos y posiciones actualizados en la misma transacción que ejecuta cada orden.
-- **Reserva de pesos y acciones por órdenes `NEW`.** Hoy un usuario puede dejar varias órdenes LIMIT que en conjunto superen su saldo.
+Lo dejé afuera a propósito porque excede el enunciado, pero lo tendría en cuenta:
+
+- **Idempotencia.** Si un cliente reintenta un pedido por un corte de red, hoy se crean dos órdenes. Se resuelve con una clave única por pedido (`Idempotency-Key`) guardada con un índice único, pero implica cambiar el esquema y el contrato del endpoint.
+- **Saldos y posiciones materializados.** Recalcular desde las órdenes está bien para este volumen. Con historiales largos mantendría saldos y posiciones actualizados en la misma transacción que ejecuta cada orden.
+- **Reserva de pesos y acciones para las órdenes `NEW`.** Hoy un usuario puede dejar varias LIMIT que juntas superen su saldo.
 - **Horario de rueda y días hábiles**, con calendario de feriados.
-- **Autenticación y autorización.** Entre otras cosas, para verificar que una orden pertenezca a quien la cancela.
-- **Índices** sobre `orders(userid, status)` y `marketdata(instrumentid, date)`.
+- **Autenticación y autorización.** Entre otras cosas, para verificar que la orden que se cancela sea de quien la cancela.
+- **Índices** en `orders(userid, status)` y `marketdata(instrumentid, date)`.
 
-## Cómo se desarrolló
+## Cómo trabajé
 
-El proyecto se hizo con desarrollo guiado por especificaciones y TDD. Cada funcionalidad tiene en [`specs/`](specs/) su especificación con criterios de aceptación, su plan técnico y sus tareas; el código se escribió después, test primero y con un commit por tarea.
+Lo desarrollé con Spec-Driven Development y TDD. Antes de cada funcionalidad escribí su especificación con los criterios de aceptación, después el plan técnico y las tareas, y recién ahí el código, siempre con el test primero y un commit por tarea. Todo eso está en la carpeta [`specs/`](specs/) y se puede seguir en el historial de commits.
 
-- [`specs/domain-context.md`](specs/domain-context.md): esquema real, datos provistos, el portfolio del usuario 1 calculado a mano y la lista completa de supuestos.
-- [`specs/architecture.md`](specs/architecture.md): reglas de arquitectura, dinero y testing.
+Usé IA como asistente para la implementación, guiada por esas especificaciones: revisé cada tarea contra sus criterios de aceptación antes de aceptarla.
+
+Si quieren ver el razonamiento detrás de cada decisión, estos son los archivos más útiles:
+
+- [`specs/domain-context.md`](specs/domain-context.md): el esquema real, los datos, el portfolio del usuario 1 calculado a mano y la lista completa de supuestos.
+- [`specs/architecture.md`](specs/architecture.md): las reglas de arquitectura, manejo de dinero y testing.
 - Una carpeta por fase: foundation, búsqueda, portfolio, envío de órdenes y cancelación.
