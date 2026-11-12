@@ -6,12 +6,12 @@ Cómo se implementa `spec.md`. Respeta `specs/architecture.md`.
 
 | Paquete | Para qué |
 |---|---|
-| `@nestjs/common`, `@nestjs/core`, `@nestjs/platform-express` | Framework |
+| `@nestjs/common`, `@nestjs/core`, `@nestjs/platform-express` (`^11`) | Framework |
 | `reflect-metadata`, `rxjs` | Dependencias obligatorias (peer) de NestJS |
-| `@nestjs/config` | Variables de entorno |
-| `@nestjs/typeorm`, `typeorm`, `pg` | Acceso a datos |
-| `decimal.js` | Dinero y porcentajes |
-| `class-validator`, `class-transformer` | Validación de DTOs y de la configuración |
+| `@nestjs/config` (`^4`) | Variables de entorno |
+| `@nestjs/typeorm` (`^11`), `typeorm` (`^0.3`), `pg` (`^8`) | Acceso a datos |
+| `decimal.js` (`^10`) | Dinero y porcentajes |
+| `class-validator` (`^0.15`), `class-transformer` (`^0.5`) | Validación de DTOs y de la configuración |
 | `typescript`, `@nestjs/cli`, `@nestjs/schematics` (dev) | Compilación, `nest build` / `nest start` y `nest-cli.json` |
 | `jest`, `ts-jest`, `supertest`, `@nestjs/testing` (dev) | Tests |
 | `ts-node` (dev) | Necesario para que Jest lea `jest.config.ts` |
