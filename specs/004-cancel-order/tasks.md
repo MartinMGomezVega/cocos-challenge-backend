@@ -2,7 +2,7 @@
 
 Una por vez y en orden. En las tareas **TDD**, primero el test en rojo. Un commit por tarea. Antes de cada commit: lint, tests y build.
 
-- [ ] **T1. Regla de cancelación (TDD).** `order-cancellation.ts`. Casos: `NEW` no lanza; `FILLED`, `REJECTED` y `CANCELLED` lanzan `ORDER_NOT_CANCELLABLE` con `kind` `CONFLICT`.
+- [x] **T1. Regla de cancelación (TDD).** `order-cancellation.ts`. Casos: `NEW` no lanza; `FILLED`, `REJECTED` y `CANCELLED` lanzan `ORDER_NOT_CANCELLABLE` con `kind` `CONFLICT`.
   Commit: `feat: add order cancellation rule`
 
 - [ ] **T2. Caso de uso y repositorio (TDD).** `findById` y `cancelIfNew` en el puerto y en el repositorio TypeORM, y `CancelOrderUseCase`. El puerto y su implementación van en el mismo commit para que el proyecto compile. Casos de uso: orden inexistente, orden no cancelable, cancelación correcta, carrera perdida. Casos de integración: `findById` existente e inexistente; `cancelIfNew` sobre una orden `NEW` insertada por el test; `cancelIfNew` sobre una orden no `NEW` devuelve `null` y no la modifica.
