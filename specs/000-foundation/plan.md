@@ -45,6 +45,7 @@ src/infrastructure/entities/user.entity.ts
 src/infrastructure/entities/instrument.entity.ts
 src/infrastructure/entities/order.entity.ts
 src/infrastructure/entities/market-data.entity.ts
+src/presentation/configure-app.ts
 src/presentation/filters/domain-error.filter.ts
 ```
 
