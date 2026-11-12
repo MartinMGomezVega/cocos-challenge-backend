@@ -2,7 +2,7 @@
 
 Una por vez y en orden. En las tareas marcadas con **TDD**, primero el test en rojo. Un commit por tarea.
 
-- [ ] **T1. Scaffold.** Crear el proyecto NestJS con TypeScript `strict`, ESLint y Prettier. Borrar el controller y el service de ejemplo. Crear la estructura de carpetas de `AGENTS.md`.
+- [x] **T1. Scaffold.** Crear el proyecto NestJS con TypeScript `strict`, ESLint y Prettier. Borrar el controller y el service de ejemplo. Crear la estructura de carpetas de `AGENTS.md`.
   Commit: `chore: scaffold nestjs project`
 
 - [ ] **T2. Repo seguro.** `.gitignore` con `.env`, `node_modules`, `dist`, `coverage`. Crear `.env.example` sin valores reales. Crear `.nvmrc` con `v26.13.1` y agregar `"engines": { "node": ">=26.13.1 <27" }` a `package.json` (ver `spec.md` R1). Copiar `specs/backend-challenge.md` (enunciado) y `database/database.sql` desde el repo de Cocos.
