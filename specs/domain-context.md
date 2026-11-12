@@ -67,9 +67,9 @@ Sirve como primer test de aceptación.
 
 | Activo | Cantidad | Valor | Rendimiento total | Retorno diario |
 |---|---|---|---|---|
-| PAMP | 40 | 37034.00 | -0.45 | 0.44 |
-| METR | 500 | 114750.00 | -8.20 | -1.08 |
 | BMA | -10 | -15028.00 | null | -1.15 |
+| METR | 500 | 114750.00 | -8.20 | -1.08 |
+| PAMP | 40 | 37034.00 | -0.45 | 0.44 |
 
 Usuarios 2, 3 y 4: pesos 0.00, valor total 0.00, sin posiciones.
 
@@ -95,6 +95,8 @@ El enunciado no los define; se documentan también en el README.
 | S13 | El `datetime` de una orden nueva es la hora del servidor en UTC al momento de crearla. |
 | S14 | Sin autenticación: el usuario se identifica con `userId` en la ruta o en el body. |
 | S15 | No se valida horario de mercado ni días hábiles: una orden se acepta a cualquier hora. |
+| S16 | Una posición sobre un activo sin datos de mercado tiene valor y rendimientos `null` y no suma al valor total de la cuenta. |
+| S17 | Las posiciones del portfolio se listan por ticker ascendente. |
 
 ## 6. Fuera de alcance (sección "Qué agregaría en producción" del README)
 
