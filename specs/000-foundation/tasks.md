@@ -17,7 +17,7 @@ Una por vez y en orden. En las tareas marcadas con **TDD**, primero el test en r
 - [x] **T5. DomainError y filtro (TDD).** Tests de `DomainError` (lleva `code` y `message`) y del filtro (devuelve `{ code, message }` con el status indicado). Luego la implementación.
   Commit: `feat: add domain error and http filter`
 
-- [ ] **T6. Base de test.** `docker-compose.yml` con el servicio `db-test`, `.env.test` y `test/support/assert-safe-database.ts` con su test (TDD): aborta con host `neon.tech`, pasa con `localhost`. Cubre CA8.
+- [x] **T6. Base de test.** `docker-compose.yml` con el servicio `db-test`, `.env.test` y `test/support/assert-safe-database.ts` con su test (TDD): aborta con host `neon.tech`, pasa con `localhost`. Cubre CA8.
   Commit: `chore: add local test database and safety guard`
 
 - [ ] **T7. Configuración y conexión (TDD).** Test de `env.validation.ts`: falla sin `DATABASE_URL`, acepta `PORT` opcional. Luego `database.module.ts` con SSL condicional. Cubre CA1 y CA2.

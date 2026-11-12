@@ -6,6 +6,7 @@ const config: Config = {
   testEnvironment: 'node',
   testMatch: ['<rootDir>/test/functional/*.spec.ts'],
   maxWorkers: 1,
+  globalSetup: '<rootDir>/test/support/global-setup.ts',
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },

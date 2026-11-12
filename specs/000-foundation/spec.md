@@ -62,7 +62,7 @@ Esta fase **no expone ningún endpoint de negocio**.
 
 - `docker compose up -d db-test` levanta un Postgres local y carga `database/database.sql` al crearse.
 - `.env.test` apunta a esa base y se versiona (no contiene secretos).
-- El arranque de los tests **aborta** si el host de `DATABASE_URL` contiene `neon.tech`.
+- El arranque de los tests **aborta** si `DATABASE_URL` no está definida o si el host contiene `neon.tech` (`test/support/assert-safe-database.ts` como función pura y `test/support/global-setup.ts` conectado al `globalSetup` de ambas suites de Jest, cargando `.env.test` con `process.loadEnvFile` cuando `DATABASE_URL` no está definida).
 - Cada test funcional deja la base como la encontró (transacción con rollback o limpieza de lo insertado).
 - Los tests funcionales corren en serie (`maxWorkers: 1`) porque comparten la base de test.
 

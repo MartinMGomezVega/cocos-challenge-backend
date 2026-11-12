@@ -4,7 +4,11 @@ const config: Config = {
   rootDir: '.',
   moduleFileExtensions: ['js', 'json', 'ts'],
   testEnvironment: 'node',
-  testMatch: ['<rootDir>/src/**/*.spec.ts'],
+  testMatch: [
+    '<rootDir>/src/**/*.spec.ts',
+    '<rootDir>/test/support/**/*.spec.ts',
+  ],
+  globalSetup: '<rootDir>/test/support/global-setup.ts',
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },

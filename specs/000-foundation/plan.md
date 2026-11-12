@@ -30,7 +30,8 @@ docker-compose.yml
 database/database.sql                 # copiado del repo de Cocos
 jest.config.ts                        # suite unitaria + coverage
 test/jest-functional.config.ts        # suite funcional
-test/support/assert-safe-database.ts  # aborta si el host es neon.tech
+test/support/assert-safe-database.ts  # función pura: aborta sin DATABASE_URL o si el host es neon.tech
+test/support/global-setup.ts          # globalSetup de Jest: carga .env.test y ejecuta assertSafeDatabase
 test/support/test-app.ts              # arma la app Nest para tests
 src/main.ts
 src/app.module.ts
@@ -55,7 +56,7 @@ src/presentation/filters/domain-error.filter.ts
 - **Transformer decimal:** `from: (v) => v === null ? null : new Decimal(v)`, `to: (v) => v === null ? null : v.toString()`.
 - **Mapeo de columnas:** `@Column({ name: 'instrumentid' })` en cada propiedad camelCase; `@PrimaryGeneratedColumn()` para `id`.
 - **Base de test:** servicio `db-test` en `docker-compose.yml` con imagen `postgres:16`, puerto 5433, y `database/database.sql` montado en `/docker-entrypoint-initdb.d/`.
-- **Guardia de seguridad:** `assert-safe-database.ts` se ejecuta en el `globalSetup` de ambas suites.
+- **Guardia de seguridad:** `global-setup.ts` se ejecuta en el `globalSetup` de ambas suites, carga `.env.test` si `DATABASE_URL` no está definida y llama a la función pura `assertSafeDatabase` (`assert-safe-database.ts`).
 - **Aislamiento:** los tests que escriben borran en `afterEach` las filas con `id` mayor al máximo de los datos provistos (órdenes con `id > 11`).
 
 ## Riesgo a verificar
