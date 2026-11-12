@@ -11,5 +11,5 @@ Una por vez y en orden. En las tareas **TDD**, primero el test en rojo. Un commi
 - [x] **T3. Endpoint (TDD).** `test/functional/cancel-order.spec.ts` con CA1 a CA10; luego el DTO de parámetro, el `PATCH` en el controller y el registro en `orders.module.ts`.
   Commit: `feat: add cancel order endpoint`
 
-- [ ] **T4. Ejemplos y verificación.** Agregar a `http/orders.http` los ejemplos de cancelación (correcta, repetida, inexistente). Correr lint, las tres suites y el build. Cubre CA11.
+- [x] **T4. Ejemplos y verificación.** Agregar a `http/orders.http` los ejemplos de cancelación (correcta, repetida, inexistente). Correr lint, las tres suites y el build. Cubre CA11.
   Commit: `docs: add cancel order http examples`
