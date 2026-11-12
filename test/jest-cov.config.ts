@@ -13,7 +13,7 @@ const config: Config = {
   maxWorkers: 1,
   globalSetup: '<rootDir>/test/support/global-setup-db.ts',
   transform: {
-    '^.+\\.ts$': 'ts-jest',
+    '^.+\\.ts$': ['ts-jest', { tsconfig: { isolatedModules: false } }],
   },
   collectCoverageFrom: [
     'src/**/*.ts',

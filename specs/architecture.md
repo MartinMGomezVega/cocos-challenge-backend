@@ -80,4 +80,4 @@ Ciclo por cada tarea: **test en rojo → código mínimo en verde → refactor**
 | Infraestructura (base de datos) | `src/infrastructure/**/*.int-spec.ts` | Postgres local |
 | Funcional | `test/functional/*.spec.ts` | Supertest + Postgres local |
 
-Coverage mínimo (el build falla si baja): 90 % global, 100 % en `src/domain`, calculado sobre el coverage combinado de `src` (excluidos: `main.ts`, `*.module.ts`, `*.entity.ts`, `*.dto.ts`, `*.spec.ts`, `*.int-spec.ts`).
+Coverage mínimo (el build falla si baja): 90 % global, 100 % en `src/domain`, calculado sobre el coverage combinado de `src` (excluidos: `main.ts`, `*.module.ts`, `*.entity.ts`, `*.dto.ts`, `*.spec.ts`, `*.int-spec.ts`). La suite de coverage (`test:cov`) compila con el programa completo de TypeScript (`isolatedModules: false`) para que `emitDecoratorMetadata` no genere ternarios defensivos de transpilación aislada.
