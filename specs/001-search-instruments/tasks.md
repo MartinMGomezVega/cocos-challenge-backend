@@ -14,7 +14,7 @@ Una por vez y en orden. En las tareas **TDD**, primero el test en rojo. Un commi
 - [x] **T4. Caso de uso (TDD).** Puerto `InstrumentRepository` y `SearchInstrumentsUseCase` con un repositorio falso en memoria. Casos: `totalPages` con 65 y límite 20 (4), con total 0 (0), con división exacta, y que `query`, `page` y `limit` lleguen al puerto sin alterarse.
   Commit: `feat: add search instruments use case`
 
-- [ ] **T5. Repositorio (TDD).** `typeorm-instrument.repository.int-spec.ts` contra la base de test y luego la implementación. Casos: coincidencia por ticker, por nombre, sin distinguir mayúsculas, exclusión de `MONEDA`, orden, paginado, total, comodines escapados (`%` y `_`), activos sin datos de mercado y uso de la fecha más reciente.
+- [x] **T5. Repositorio (TDD).** `typeorm-instrument.repository.int-spec.ts` contra la base de test y luego la implementación. Casos: coincidencia por ticker, por nombre, sin distinguir mayúsculas, exclusión de `MONEDA`, orden, paginado, total, comodines escapados (`%` y `_`), activos sin datos de mercado y uso de la fecha más reciente.
   Commit: `feat: add typeorm instrument repository`
 
 - [ ] **T6. Endpoint (TDD).** `test/functional/instruments.spec.ts` con CA1 a CA12, luego DTOs, controller y `src/composition/instruments.module.ts`. Agregar `src/composition/` a `specs/architecture.md`.
