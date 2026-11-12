@@ -17,4 +17,5 @@ export interface InstrumentRepository {
   search(
     params: SearchInstrumentsParams,
   ): Promise<SearchInstrumentsRepositoryResult>;
+  findByIds(ids: readonly number[]): Promise<Instrument[]>;
 }

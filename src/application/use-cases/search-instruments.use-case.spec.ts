@@ -22,6 +22,10 @@ class FakeInstrumentRepository implements InstrumentRepository {
     this.lastParams = params;
     return Promise.resolve(this.result);
   }
+
+  findByIds(): Promise<Instrument[]> {
+    return Promise.resolve([]);
+  }
 }
 
 describe('SearchInstrumentsUseCase', () => {

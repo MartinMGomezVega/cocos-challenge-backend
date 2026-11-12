@@ -11,7 +11,7 @@ Una por vez y en orden. En las tareas **TDD**, primero el test en rojo. Un commi
 - [x] **T3. Valuación (TDD).** `portfolio.ts`. Casos: usuario 1 completo (CA1 a CA4, total 889756); posición negativa con rendimiento `null`; instrumento sin precio (CA12); exclusión de `MONEDA`; orden por ticker; cuenta vacía.
   Commit: `feat: add portfolio valuation`
 
-- [ ] **T4. Caso de uso (TDD).** Puertos `UserRepository` y `OrderRepository`, `findByIds` en `InstrumentRepository`, y `GetPortfolioUseCase` con repositorios falsos. Casos: usuario inexistente lanza `USER_NOT_FOUND`; usuario sin órdenes; flujo completo.
+- [x] **T4. Caso de uso (TDD).** Puertos `UserRepository` y `OrderRepository`, `findByIds` en `InstrumentRepository`, y `GetPortfolioUseCase` con repositorios falsos. Casos: usuario inexistente lanza `USER_NOT_FOUND`; usuario sin órdenes; flujo completo.
   Commit: `feat: add get portfolio use case`
 
 - [ ] **T5. Repositorios (TDD).** Tests `*.int-spec.ts` y luego las implementaciones. Casos: `exists` verdadero y falso; el usuario 1 devuelve exactamente sus 7 movimientos `FILLED`; un usuario sin órdenes devuelve lista vacía; `findByIds` devuelve instrumentos con su último precio y, con lista vacía, no consulta la base.
