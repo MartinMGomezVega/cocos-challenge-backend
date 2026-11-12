@@ -36,6 +36,10 @@ class FakeOrderRepository implements OrderRepository {
   findFilledMovementsByUser(userId: number): Promise<AccountMovement[]> {
     return Promise.resolve(this.movementsByUser.get(userId) ?? []);
   }
+
+  submitAtomically(): ReturnType<OrderRepository['submitAtomically']> {
+    return Promise.reject(new Error('Not implemented'));
+  }
 }
 
 class FakeInstrumentRepository implements InstrumentRepository {
@@ -56,6 +60,10 @@ class FakeInstrumentRepository implements InstrumentRepository {
     return Promise.resolve(
       this.instruments.filter((inst) => idSet.has(inst.id)),
     );
+  }
+
+  findById(): Promise<Instrument | null> {
+    return Promise.resolve(null);
   }
 }
 

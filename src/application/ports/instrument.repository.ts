@@ -18,4 +18,5 @@ export interface InstrumentRepository {
     params: SearchInstrumentsParams,
   ): Promise<SearchInstrumentsRepositoryResult>;
   findByIds(ids: readonly number[]): Promise<Instrument[]>;
+  findById(id: number): Promise<Instrument | null>;
 }
