@@ -91,7 +91,7 @@ El enunciado no los define; se documentan también en el README.
 | S9 | Request inválido (campos faltantes o mal formados, usuario o instrumento inexistente): error HTTP y la orden no se graba. |
 | S10 | `POST /v1/orders` solo acepta `side` `BUY` o `SELL`, y no opera instrumentos de tipo `MONEDA`. |
 | S11 | Activo sin datos de mercado: en la búsqueda aparece con precio y retorno diario `null`. Una orden MARKET sobre él devuelve error HTTP y no se graba. |
-| S12 | Cancelar una orden que no está en `NEW` devuelve error HTTP y no modifica nada. |
+| S12 | Ver S21. |
 | S13 | El `datetime` de una orden nueva es la hora del servidor en UTC al momento de crearla. |
 | S14 | Sin autenticación: el usuario se identifica con `userId` en la ruta o en el body. |
 | S15 | No se valida horario de mercado ni días hábiles: una orden se acepta a cualquier hora. |
@@ -100,6 +100,7 @@ El enunciado no los define; se documentan también en el README.
 | S18 | El monto en pesos (`amount`) se acepta tanto en compras como en ventas. |
 | S19 | La validación y el grabado de una orden son atómicos por usuario, con bloqueo de la fila del usuario dentro de una transacción. |
 | S20 | Errores previos al grabado: `INSTRUMENT_NOT_FOUND` (404), `INSTRUMENT_NOT_TRADABLE` (400) y `MARKET_PRICE_UNAVAILABLE` (422). |
+| S21 | Cancelar una orden que no existe devuelve 404 `ORDER_NOT_FOUND`; cancelar una que no está en `NEW` devuelve 409 `ORDER_NOT_CANCELLABLE`. No se verifica quién cancela porque no hay autenticación. |
 
 ## 6. Fuera de alcance (sección "Qué agregaría en producción" del README)
 
