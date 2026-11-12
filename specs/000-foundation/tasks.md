@@ -26,7 +26,7 @@ Una por vez y en orden. En las tareas marcadas con **TDD**, primero el test en r
 - [x] **T8. Transformer decimal (TDD).** Tests: `"930.00"` → `Decimal(930)`, `null` → `null`, y el camino inverso.
   Commit: `feat: add decimal column transformer`
 
-- [ ] **T9. Entidades (TDD).** Tests contra la base de test para CA3, CA4, CA5 y CA6. Luego las cuatro entidades. Si los datos locales no coinciden con `specs/domain-context.md`, frenar y avisar.
+- [x] **T9. Entidades (TDD).** Tests contra la base de test para CA3, CA4, CA5 y CA6. Luego las cuatro entidades. Si los datos locales no coinciden con `specs/domain-context.md`, frenar y avisar.
   Commit: `feat: map database entities`
 
 - [ ] **T10. Arranque de la app.** `main.ts` con versionado URI `/v1`, `ValidationPipe` global y el filtro de errores. `test/support/test-app.ts` para los tests funcionales.
