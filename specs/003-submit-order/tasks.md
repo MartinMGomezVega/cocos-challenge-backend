@@ -11,7 +11,7 @@ Una por vez y en orden. En las tareas **TDD**, primero el test en rojo. Un commi
 - [x] **T3. Repositorio atómico (TDD).** Tests `*.int-spec.ts` y luego la implementación de `submitAtomically` y `findById`. Casos: inserta y devuelve la orden con su `id`; si `decide` lanza un error no queda ninguna fila; `datetime` se graba en UTC; dos llamadas simultáneas del mismo usuario se ejecutan una después de la otra (la segunda ve la orden de la primera).
   Commit: `feat: add atomic order submission`
 
-- [ ] **T4. Endpoint (TDD).** `test/functional/orders.spec.ts` con CA1 a CA29; luego DTOs, controller y `src/composition/orders.module.ts`. Los casos que verifican el portfolio lo consultan por HTTP después de enviar la orden.
+- [x] **T4. Endpoint (TDD).** `test/functional/orders.spec.ts` con CA1 a CA29; luego DTOs, controller y `src/composition/orders.module.ts`. Los casos que verifican el portfolio lo consultan por HTTP después de enviar la orden.
   Commit: `feat: add submit order endpoint`
 
 - [ ] **T5. Ejemplos y verificación.** `http/orders.http` (MARKET por cantidad, MARKET por monto, LIMIT, orden rechazada, error de validación). Correr lint, las tres suites y el build. Cubre CA30.
