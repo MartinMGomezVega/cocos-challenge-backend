@@ -11,6 +11,7 @@ import {
   USER_REPOSITORY,
   UserRepository,
 } from '../application/ports/user.repository';
+import { CancelOrderUseCase } from '../application/use-cases/cancel-order.use-case';
 import { SubmitOrderUseCase } from '../application/use-cases/submit-order.use-case';
 import { TypeOrmInstrumentRepository } from '../infrastructure/repositories/typeorm-instrument.repository';
 import { TypeOrmOrderRepository } from '../infrastructure/repositories/typeorm-order.repository';
@@ -45,6 +46,12 @@ import { OrdersController } from '../presentation/controllers/orders.controller'
           instrumentRepository,
           orderRepository,
         ),
+    },
+    {
+      provide: CancelOrderUseCase,
+      inject: [ORDER_REPOSITORY],
+      useFactory: (orderRepository: OrderRepository) =>
+        new CancelOrderUseCase(orderRepository),
     },
   ],
 })
