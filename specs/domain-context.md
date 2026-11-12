@@ -97,6 +97,9 @@ El enunciado no los define; se documentan también en el README.
 | S15 | No se valida horario de mercado ni días hábiles: una orden se acepta a cualquier hora. |
 | S16 | Una posición sobre un activo sin datos de mercado tiene valor y rendimientos `null` y no suma al valor total de la cuenta. |
 | S17 | Las posiciones del portfolio se listan por ticker ascendente. |
+| S18 | El monto en pesos (`amount`) se acepta tanto en compras como en ventas. |
+| S19 | La validación y el grabado de una orden son atómicos por usuario, con bloqueo de la fila del usuario dentro de una transacción. |
+| S20 | Errores previos al grabado: `INSTRUMENT_NOT_FOUND` (404), `INSTRUMENT_NOT_TRADABLE` (400) y `MARKET_PRICE_UNAVAILABLE` (422). |
 
 ## 6. Fuera de alcance (sección "Qué agregaría en producción" del README)
 
