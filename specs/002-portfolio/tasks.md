@@ -14,7 +14,7 @@ Una por vez y en orden. En las tareas **TDD**, primero el test en rojo. Un commi
 - [x] **T4. Caso de uso (TDD).** Puertos `UserRepository` y `OrderRepository`, `findByIds` en `InstrumentRepository`, y `GetPortfolioUseCase` con repositorios falsos. Casos: usuario inexistente lanza `USER_NOT_FOUND`; usuario sin órdenes; flujo completo.
   Commit: `feat: add get portfolio use case`
 
-- [ ] **T5. Repositorios (TDD).** Tests `*.int-spec.ts` y luego las implementaciones. Casos: `exists` verdadero y falso; el usuario 1 devuelve exactamente sus 7 movimientos `FILLED`; un usuario sin órdenes devuelve lista vacía; `findByIds` devuelve instrumentos con su último precio y, con lista vacía, no consulta la base.
+- [x] **T5. Repositorios (TDD).** Tests `*.int-spec.ts` y luego las implementaciones. Casos: `exists` verdadero y falso; el usuario 1 devuelve exactamente sus 7 movimientos `FILLED`; un usuario sin órdenes devuelve lista vacía; `findByIds` devuelve instrumentos con su último precio y, con lista vacía, no consulta la base.
   Commit: `feat: add portfolio repositories`
 
 - [ ] **T6. Endpoint (TDD).** `test/functional/portfolio.spec.ts` con CA1 a CA10 y `test/support/order-fixtures.ts`; luego DTOs, controller y `src/composition/portfolio.module.ts`.

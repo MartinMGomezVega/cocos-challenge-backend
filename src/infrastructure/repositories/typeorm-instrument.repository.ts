@@ -25,8 +25,38 @@ interface RawCountRow {
   total: string;
 }
 
+const SELECT_INSTRUMENTS_WITH_LATEST_MARKET_DATA = `
+  SELECT
+    i.id,
+    i.ticker,
+    i.name,
+    i.type,
+    m.close,
+    m.previousclose
+  FROM instruments i
+  LEFT JOIN LATERAL (
+    SELECT md.close, md.previousclose
+    FROM marketdata md
+    WHERE md.instrumentid = i.id
+    ORDER BY md.date DESC, md.id DESC
+    LIMIT 1
+  ) m ON TRUE
+`;
+
 function escapeLikePattern(input: string): string {
   return input.replace(/[\\%_]/g, '\\$&');
+}
+
+function mapRowToInstrument(row: RawInstrumentRow): Instrument {
+  const marketPrice =
+    row.close !== null
+      ? new MarketPrice(
+          new Decimal(row.close),
+          row.previousclose !== null ? new Decimal(row.previousclose) : null,
+        )
+      : null;
+
+  return new Instrument(row.id, row.ticker, row.name, row.type, marketPrice);
 }
 
 @Injectable()
@@ -59,21 +89,7 @@ export class TypeOrmInstrumentRepository implements InstrumentRepository {
     `;
 
     const dataSql = `
-      SELECT
-        i.id,
-        i.ticker,
-        i.name,
-        i.type,
-        m.close,
-        m.previousclose
-      FROM instruments i
-      LEFT JOIN LATERAL (
-        SELECT md.close, md.previousclose
-        FROM marketdata md
-        WHERE md.instrumentid = i.id
-        ORDER BY md.date DESC, md.id DESC
-        LIMIT 1
-      ) m ON TRUE
+      ${SELECT_INSTRUMENTS_WITH_LATEST_MARKET_DATA}
       WHERE ${whereClause}
       ORDER BY i.ticker ASC, i.id ASC
       LIMIT ${limitPlaceholder} OFFSET ${offsetPlaceholder}
@@ -85,26 +101,23 @@ export class TypeOrmInstrumentRepository implements InstrumentRepository {
     ]);
 
     const total = Number(countRows[0].total);
-    const items = dataRows.map((row) => {
-      const marketPrice =
-        row.close !== null
-          ? new MarketPrice(
-              new Decimal(row.close),
-              row.previousclose !== null
-                ? new Decimal(row.previousclose)
-                : null,
-            )
-          : null;
-
-      return new Instrument(
-        row.id,
-        row.ticker,
-        row.name,
-        row.type,
-        marketPrice,
-      );
-    });
+    const items = dataRows.map(mapRowToInstrument);
 
     return { items, total };
+  }
+
+  async findByIds(ids: readonly number[]): Promise<Instrument[]> {
+    if (ids.length === 0) {
+      return [];
+    }
+
+    const sql = `
+      ${SELECT_INSTRUMENTS_WITH_LATEST_MARKET_DATA}
+      WHERE i.id = ANY($1::int[])
+      ORDER BY i.ticker ASC, i.id ASC
+    `;
+
+    const rows = await this.dataSource.query<RawInstrumentRow[]>(sql, [ids]);
+    return rows.map(mapRowToInstrument);
   }
 }

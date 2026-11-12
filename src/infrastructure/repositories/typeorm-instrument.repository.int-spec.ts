@@ -183,4 +183,43 @@ describe('TypeOrmInstrumentRepository (integration)', () => {
       ]);
     }
   });
+
+  describe('findByIds', () => {
+    it('returns matching instruments with their latest marketPrice', async () => {
+      const instruments = await repository.findByIds([31, 47, 54]);
+
+      expect(instruments).toHaveLength(3);
+      expect(instruments.every((inst) => inst instanceof Instrument)).toBe(
+        true,
+      );
+
+      const bma = instruments.find((i) => i.id === 31);
+      expect(bma?.ticker).toBe('BMA');
+      expect(bma?.marketPrice?.close).toEqual(new Decimal('1502.80'));
+      expect(bma?.marketPrice?.previousClose).toEqual(new Decimal('1520.25'));
+
+      const pamp = instruments.find((i) => i.id === 47);
+      expect(pamp?.ticker).toBe('PAMP');
+      expect(pamp?.marketPrice?.close).toEqual(new Decimal('925.85'));
+      expect(pamp?.marketPrice?.previousClose).toEqual(new Decimal('921.80'));
+
+      const metr = instruments.find((i) => i.id === 54);
+      expect(metr?.ticker).toBe('METR');
+      expect(metr?.marketPrice?.close).toEqual(new Decimal('229.50'));
+      expect(metr?.marketPrice?.previousClose).toEqual(new Decimal('232.00'));
+    });
+
+    it('returns empty array and does not query the database when ids is empty', async () => {
+      const querySpy = jest.spyOn(dataSource, 'query');
+      querySpy.mockClear();
+
+      try {
+        const result = await repository.findByIds([]);
+        expect(result).toEqual([]);
+        expect(querySpy).not.toHaveBeenCalled();
+      } finally {
+        querySpy.mockRestore();
+      }
+    });
+  });
 });
