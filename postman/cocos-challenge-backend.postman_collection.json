@@ -1,0 +1,210 @@
+{
+  "info": {
+    "name": "Cocos Challenge Backend",
+    "description": "Ejemplos de uso de la API del backend challenge de Cocos Capital. La variable baseUrl apunta a http://localhost:3000. La variable orderId se completa sola al crear una orden LIMIT.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "orderId", "value": "15" }
+  ],
+  "item": [
+    {
+      "name": "Portfolio",
+      "item": [
+        {
+          "name": "Portfolio del usuario 1",
+          "request": { "method": "GET", "url": "{{baseUrl}}/v1/users/1/portfolio" }
+        },
+        {
+          "name": "Portfolio de un usuario sin órdenes",
+          "request": { "method": "GET", "url": "{{baseUrl}}/v1/users/2/portfolio" }
+        },
+        {
+          "name": "Usuario inexistente (404)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/v1/users/999/portfolio" }
+        },
+        {
+          "name": "Id inválido (400)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/v1/users/abc/portfolio" }
+        }
+      ]
+    },
+    {
+      "name": "Buscar activos",
+      "item": [
+        {
+          "name": "Buscar por ticker",
+          "request": { "method": "GET", "url": "{{baseUrl}}/v1/instruments?query=pamp" }
+        },
+        {
+          "name": "Buscar por nombre",
+          "request": { "method": "GET", "url": "{{baseUrl}}/v1/instruments?query=banco" }
+        },
+        {
+          "name": "Listar todos, página 1",
+          "request": { "method": "GET", "url": "{{baseUrl}}/v1/instruments" }
+        },
+        {
+          "name": "Paginado: página 4 de a 20",
+          "request": { "method": "GET", "url": "{{baseUrl}}/v1/instruments?page=4&limit=20" }
+        },
+        {
+          "name": "Sin resultados",
+          "request": { "method": "GET", "url": "{{baseUrl}}/v1/instruments?query=zzzzzz" }
+        },
+        {
+          "name": "Parámetro inválido (400)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/v1/instruments?limit=101" }
+        }
+      ]
+    },
+    {
+      "name": "Órdenes",
+      "item": [
+        {
+          "name": "Compra MARKET por cantidad (FILLED)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/orders",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 47,\n  \"side\": \"BUY\",\n  \"type\": \"MARKET\",\n  \"size\": 10\n}"
+            }
+          }
+        },
+        {
+          "name": "Compra MARKET por monto en pesos (FILLED)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/orders",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 47,\n  \"side\": \"BUY\",\n  \"type\": \"MARKET\",\n  \"amount\": 50000\n}"
+            }
+          }
+        },
+        {
+          "name": "Venta MARKET (FILLED)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/orders",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 47,\n  \"side\": \"SELL\",\n  \"type\": \"MARKET\",\n  \"size\": 10\n}"
+            }
+          }
+        },
+        {
+          "name": "Compra LIMIT (NEW) - guarda orderId",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  pm.collectionVariables.set('orderId', pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/orders",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 47,\n  \"side\": \"BUY\",\n  \"type\": \"LIMIT\",\n  \"size\": 5,\n  \"price\": 900\n}"
+            }
+          }
+        },
+        {
+          "name": "Venta por más acciones de las que tiene (REJECTED)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/orders",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 47,\n  \"side\": \"SELL\",\n  \"type\": \"MARKET\",\n  \"size\": 100\n}"
+            }
+          }
+        },
+        {
+          "name": "Compra por más pesos de los disponibles (REJECTED)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/orders",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 47,\n  \"side\": \"BUY\",\n  \"type\": \"MARKET\",\n  \"size\": 100000\n}"
+            }
+          }
+        },
+        {
+          "name": "LIMIT sin precio (400)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/orders",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 47,\n  \"side\": \"BUY\",\n  \"type\": \"LIMIT\",\n  \"size\": 5\n}"
+            }
+          }
+        },
+        {
+          "name": "Orden sobre ARS (400 INSTRUMENT_NOT_TRADABLE)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/orders",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 66,\n  \"side\": \"BUY\",\n  \"type\": \"MARKET\",\n  \"size\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Instrumento inexistente (404)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/v1/orders",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"instrumentId\": 9999,\n  \"side\": \"BUY\",\n  \"type\": \"MARKET\",\n  \"size\": 1\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cancelar orden",
+      "item": [
+        {
+          "name": "Cancelar la orden LIMIT creada (200)",
+          "request": { "method": "PATCH", "url": "{{baseUrl}}/v1/orders/{{orderId}}/cancel" }
+        },
+        {
+          "name": "Cancelar la misma orden otra vez (409)",
+          "request": { "method": "PATCH", "url": "{{baseUrl}}/v1/orders/{{orderId}}/cancel" }
+        },
+        {
+          "name": "Cancelar una orden FILLED (409)",
+          "request": { "method": "PATCH", "url": "{{baseUrl}}/v1/orders/2/cancel" }
+        },
+        {
+          "name": "Orden inexistente (404)",
+          "request": { "method": "PATCH", "url": "{{baseUrl}}/v1/orders/99999/cancel" }
+        }
+      ]
+    }
+  ]
+}
