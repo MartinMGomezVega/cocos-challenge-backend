@@ -23,7 +23,7 @@ Una por vez y en orden. En las tareas marcadas con **TDD**, primero el test en r
 - [x] **T7. Configuración y conexión (TDD).** Test de `env.validation.ts`: falla sin `DATABASE_URL`, acepta `PORT` opcional. Luego `database.module.ts` con SSL condicional. Cubre CA1 y CA2.
   Commit: `feat: add validated config and database connection`
 
-- [ ] **T8. Transformer decimal (TDD).** Tests: `"930.00"` → `Decimal(930)`, `null` → `null`, y el camino inverso.
+- [x] **T8. Transformer decimal (TDD).** Tests: `"930.00"` → `Decimal(930)`, `null` → `null`, y el camino inverso.
   Commit: `feat: add decimal column transformer`
 
 - [ ] **T9. Entidades (TDD).** Tests contra la base de test para CA3, CA4, CA5 y CA6. Luego las cuatro entidades. Si los datos locales no coinciden con `specs/domain-context.md`, frenar y avisar.
