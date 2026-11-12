@@ -1,0 +1,21 @@
+@baseUrl = http://localhost:3000/v1
+
+### Usuario con posiciones (CA1 a CA5: usuario 1)
+GET {{baseUrl}}/users/1/portfolio
+Accept: application/json
+
+### Usuario sin órdenes (CA6: usuario 2)
+GET {{baseUrl}}/users/2/portfolio
+Accept: application/json
+
+### Usuario inexistente: error 404 Not Found (CA7)
+GET {{baseUrl}}/users/999/portfolio
+Accept: application/json
+
+### Parámetro userId inválido (no numérico): error 400 Bad Request (CA8)
+GET {{baseUrl}}/users/abc/portfolio
+Accept: application/json
+
+### Parámetro userId inválido (menor a 1): error 400 Bad Request (CA8)
+GET {{baseUrl}}/users/0/portfolio
+Accept: application/json

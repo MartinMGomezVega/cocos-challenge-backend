@@ -20,5 +20,5 @@ Una por vez y en orden. En las tareas **TDD**, primero el test en rojo. Un commi
 - [x] **T6. Endpoint (TDD).** `test/functional/portfolio.spec.ts` con CA1 a CA10 y `test/support/order-fixtures.ts`; luego DTOs, controller y `src/composition/portfolio.module.ts`.
   Commit: `feat: add portfolio endpoint`
 
-- [ ] **T7. Ejemplos y verificación.** `http/portfolio.http` (usuario con posiciones, usuario sin órdenes, usuario inexistente, id inválido). Correr lint, las tres suites y el build. Cubre CA13.
+- [x] **T7. Ejemplos y verificación.** `http/portfolio.http` (usuario con posiciones, usuario sin órdenes, usuario inexistente, id inválido). Correr lint, las tres suites y el build. Cubre CA13.
   Commit: `docs: add portfolio http examples`
