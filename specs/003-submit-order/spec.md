@@ -19,13 +19,13 @@ Cubre el punto "Enviar una orden al mercado" del enunciado y sus consideraciones
 
 | Campo | Tipo | Regla |
 |---|---|---|
-| `userId` | entero | Obligatorio, mayor o igual a 1 |
-| `instrumentId` | entero | Obligatorio, mayor o igual a 1 |
+| `userId` | entero | Obligatorio, entre 1 y 2147483647 |
+| `instrumentId` | entero | Obligatorio, entre 1 y 2147483647 |
 | `side` | texto | Obligatorio: `BUY` o `SELL` |
 | `type` | texto | Obligatorio: `MARKET` o `LIMIT` |
-| `size` | entero | Cantidad de acciones, mayor o igual a 1 |
-| `amount` | número | Monto en pesos, mayor a 0, hasta 2 decimales |
-| `price` | número | Precio límite, mayor a 0, hasta 2 decimales |
+| `size` | entero | Cantidad de acciones, entre 1 y 2147483647 |
+| `amount` | número | Monto en pesos, mayor a 0 y hasta 1000000000000, hasta 2 decimales |
+| `price` | número | Precio límite, mayor a 0 y hasta 99999999.99, hasta 2 decimales |
 
 - Se envía **exactamente uno** entre `size` y `amount`.
 - `price` es obligatorio si `type` es `LIMIT` y no se admite si es `MARKET`.
@@ -38,6 +38,7 @@ Cubre el punto "Enviar una orden al mercado" del enunciado y sus consideraciones
 | El usuario no existe | 404 | `USER_NOT_FOUND` |
 | El instrumento no existe | 404 | `INSTRUMENT_NOT_FOUND` |
 | El instrumento es de tipo `MONEDA` | 400 | `INSTRUMENT_NOT_TRADABLE` |
+| La cantidad calculada a partir de `amount` supera 2147483647 | 400 | `ORDER_SIZE_TOO_LARGE` |
 | Orden `MARKET` sobre un instrumento sin datos de mercado | 422 | `MARKET_PRICE_UNAVAILABLE` |
 
 ### R3. Precio de la orden

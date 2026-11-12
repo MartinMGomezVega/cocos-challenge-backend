@@ -505,5 +505,26 @@ describe('decideOrder', () => {
         });
       }
     });
+
+    it('throws DomainError VALIDATION with code ORDER_SIZE_TOO_LARGE when calculated size exceeds 2147483647', () => {
+      try {
+        decideOrder({
+          instrumentId: PAMP_ID,
+          side: 'BUY',
+          type: 'LIMIT',
+          amount: new Decimal('30000000'),
+          limitPrice: new Decimal('0.01'),
+          marketPrice: PAMP_CLOSE,
+          movements: USER_1_FILLED_MOVEMENTS,
+        });
+        throw new Error('Expected decideOrder to throw');
+      } catch (err) {
+        expect(err).toBeInstanceOf(DomainError);
+        expect(err).toMatchObject({
+          kind: 'VALIDATION',
+          code: 'ORDER_SIZE_TOO_LARGE',
+        });
+      }
+    });
   });
 });

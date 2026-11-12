@@ -208,7 +208,7 @@ describe('PATCH /v1/orders/:orderId/cancel (functional)', () => {
     });
   });
 
-  it.each(['abc', '0', '-1', '1.5'])(
+  it.each(['abc', '0', '-1', '1.5', '99999999999'])(
     'CA7: returns 400 when orderId is invalid (%s)',
     async (invalidOrderId) => {
       await request(app.getHttpServer())

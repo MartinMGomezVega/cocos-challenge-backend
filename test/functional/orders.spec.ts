@@ -758,6 +758,57 @@ describe('POST /v1/orders (CA1-CA29)', () => {
           price: -10,
         },
       },
+      {
+        label: 'userId = 99999999999',
+        payload: {
+          userId: 99999999999,
+          instrumentId: 47,
+          side: 'BUY',
+          type: 'MARKET',
+          size: 10,
+        },
+      },
+      {
+        label: 'instrumentId = 99999999999',
+        payload: {
+          userId: 1,
+          instrumentId: 99999999999,
+          side: 'BUY',
+          type: 'MARKET',
+          size: 10,
+        },
+      },
+      {
+        label: 'size = 3000000000',
+        payload: {
+          userId: 1,
+          instrumentId: 47,
+          side: 'BUY',
+          type: 'MARKET',
+          size: 3000000000,
+        },
+      },
+      {
+        label: 'price = 100000000',
+        payload: {
+          userId: 1,
+          instrumentId: 47,
+          side: 'BUY',
+          type: 'LIMIT',
+          size: 10,
+          price: 100000000,
+        },
+      },
+      {
+        label: 'amount = 1e15',
+        payload: {
+          userId: 1,
+          instrumentId: 47,
+          side: 'BUY',
+          type: 'MARKET',
+          amount: 1e15,
+        },
+      },
     ])(
       'CA21: returns 400 and does not persist for invalid number ($label)',
       async ({ payload }) => {
@@ -769,6 +820,25 @@ describe('POST /v1/orders (CA1-CA29)', () => {
         expect(await countOrders()).toBe(11);
       },
     );
+
+    it('CA21b: returns 400 ORDER_SIZE_TOO_LARGE and does not persist when amount with low price yields size > 2147483647', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/v1/orders')
+        .send({
+          userId: 1,
+          instrumentId: 47,
+          side: 'BUY',
+          type: 'LIMIT',
+          amount: 30000000,
+          price: 0.01,
+        })
+        .expect(400);
+
+      expect(res.body).toMatchObject({
+        code: 'ORDER_SIZE_TOO_LARGE',
+      });
+      expect(await countOrders()).toBe(11);
+    });
 
     it.each([
       {

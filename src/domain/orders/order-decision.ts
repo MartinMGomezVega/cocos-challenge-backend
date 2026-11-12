@@ -24,6 +24,8 @@ export interface OrderDecision {
   readonly rejectionReason: RejectionReason | null;
 }
 
+const MAX_ORDER_SIZE = 2147483647;
+
 export function decideOrder(input: DecideOrderInput): OrderDecision {
   let price: Decimal;
   if (input.type === 'MARKET') {
@@ -43,6 +45,14 @@ export function decideOrder(input: DecideOrderInput): OrderDecision {
     input.size !== undefined
       ? input.size
       : input.amount!.dividedBy(price).floor().toNumber();
+
+  if (size > MAX_ORDER_SIZE) {
+    throw new DomainError(
+      'ORDER_SIZE_TOO_LARGE',
+      `Calculated order size exceeds maximum allowed (${MAX_ORDER_SIZE})`,
+      'VALIDATION',
+    );
+  }
 
   if (size === 0) {
     return {

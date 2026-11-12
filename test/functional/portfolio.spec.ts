@@ -181,7 +181,7 @@ describe('GET /v1/users/:userId/portfolio (CA1-CA10)', () => {
     });
   });
 
-  it.each(['abc', '0', '-1', '1.5'])(
+  it.each(['abc', '0', '-1', '1.5', '99999999999'])(
     'CA8: returns 400 for invalid userId "%s"',
     async (invalidUserId) => {
       await request(app.getHttpServer())

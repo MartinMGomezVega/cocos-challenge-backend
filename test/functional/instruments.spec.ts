@@ -201,6 +201,7 @@ describe('GET /v1/instruments (CA1-CA12)', () => {
 
   it.each([
     { label: '?page=0', query: { page: '0' } },
+    { label: '?page=1e18', query: { page: '1e18' } },
     { label: '?limit=101', query: { limit: '101' } },
     { label: '?limit=abc', query: { limit: 'abc' } },
     { label: '?foo=1', query: { foo: '1' } },

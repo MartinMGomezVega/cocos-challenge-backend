@@ -26,7 +26,7 @@ Cubre el punto "Buscar activos" del enunciado y las consideraciones sobre precio
 | Parámetro | Tipo | Regla | Por defecto |
 |---|---|---|---|
 | `query` | texto | Opcional. Se le quitan espacios al inicio y al final. Máximo 50 caracteres. | sin filtro |
-| `page` | entero | Mayor o igual a 1. | 1 |
+| `page` | entero | Entre 1 y 1000000. | 1 |
 | `limit` | entero | Entre 1 y 100. | 20 |
 
 - Un parámetro inválido o un parámetro desconocido devuelve 400.

@@ -15,7 +15,7 @@ Cubre dos consideraciones del enunciado: el estado `CANCELLED` ("cuando la orden
 
 ### R1. Parámetro
 
-- `orderId` es un entero mayor o igual a 1. Cualquier otro valor devuelve 400.
+- `orderId` es un entero entre 1 y 2147483647. Cualquier otro valor devuelve 400.
 - El pedido no lleva body.
 
 ### R2. Reglas

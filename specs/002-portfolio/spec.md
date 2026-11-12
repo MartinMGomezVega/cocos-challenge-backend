@@ -18,7 +18,7 @@ Los cálculos de pesos disponibles y de tenencia se reutilizan en la fase 003 pa
 
 ### R1. Parámetro
 
-- `userId` es un entero mayor o igual a 1. Cualquier otro valor devuelve 400.
+- `userId` es un entero entre 1 y 2147483647. Cualquier otro valor devuelve 400.
 - Si el usuario no existe, devuelve 404 con `code` `USER_NOT_FOUND`.
 
 ### R2. Movimientos considerados

@@ -25,6 +25,7 @@ export class SearchInstrumentsQueryDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
+  @Max(1000000)
   page: number = 1;
 
   @IsOptional()

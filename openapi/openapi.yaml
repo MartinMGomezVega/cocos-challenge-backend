@@ -27,7 +27,7 @@ paths:
         - name: userId
           in: path
           required: true
-          schema: { type: integer, minimum: 1 }
+          schema: { type: integer, minimum: 1, maximum: 2147483647 }
           example: 1
       responses:
         '200':
@@ -88,7 +88,7 @@ paths:
         - name: page
           in: query
           required: false
-          schema: { type: integer, minimum: 1, default: 1 }
+          schema: { type: integer, minimum: 1, maximum: 1000000, default: 1 }
         - name: limit
           in: query
           required: false
@@ -223,7 +223,7 @@ paths:
         - name: orderId
           in: path
           required: true
-          schema: { type: integer, minimum: 1 }
+          schema: { type: integer, minimum: 1, maximum: 2147483647 }
           example: 12
       responses:
         '200':
@@ -340,24 +340,27 @@ components:
         - required: [amount]
       additionalProperties: false
       properties:
-        userId: { type: integer, minimum: 1 }
-        instrumentId: { type: integer, minimum: 1 }
+        userId: { type: integer, minimum: 1, maximum: 2147483647 }
+        instrumentId: { type: integer, minimum: 1, maximum: 2147483647 }
         side: { type: string, enum: [BUY, SELL] }
         type: { type: string, enum: [MARKET, LIMIT] }
         size:
           type: integer
           minimum: 1
+          maximum: 2147483647
           description: Cantidad de acciones. Excluyente con `amount`.
         amount:
           type: number
           exclusiveMinimum: true
           minimum: 0
+          maximum: 1000000000000
           multipleOf: 0.01
           description: Monto en pesos. Se opera la máxima cantidad de acciones enteras. Excluyente con `size`.
         price:
           type: number
           exclusiveMinimum: true
           minimum: 0
+          maximum: 99999999.99
           multipleOf: 0.01
           description: Precio límite. Obligatorio en LIMIT; no se admite en MARKET.
 
@@ -391,6 +394,7 @@ components:
             - INSTRUMENT_NOT_FOUND
             - ORDER_NOT_FOUND
             - INSTRUMENT_NOT_TRADABLE
+            - ORDER_SIZE_TOO_LARGE
             - MARKET_PRICE_UNAVAILABLE
             - ORDER_NOT_CANCELLABLE
         message: { type: string }

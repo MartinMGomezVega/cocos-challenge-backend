@@ -3,6 +3,7 @@ import {
   IsInt,
   IsNumber,
   IsPositive,
+  Max,
   Min,
   ValidateBy,
   ValidateIf,
@@ -15,10 +16,12 @@ import type { OrderSide, OrderType } from '../../domain/orders/order';
 export class SubmitOrderBodyDto {
   @IsInt()
   @Min(1)
+  @Max(2147483647)
   userId!: number;
 
   @IsInt()
   @Min(1)
+  @Max(2147483647)
   instrumentId!: number;
 
   @IsIn(['BUY', 'SELL'])
@@ -32,6 +35,7 @@ export class SubmitOrderBodyDto {
   )
   @IsInt()
   @Min(1)
+  @Max(2147483647)
   @ValidateBy({
     name: 'mutuallyExclusiveSizeAndAmount',
     validator: {
@@ -47,6 +51,7 @@ export class SubmitOrderBodyDto {
   @ValidateIf((o: SubmitOrderBodyDto) => o.size === undefined)
   @IsNumber({ maxDecimalPlaces: 2 })
   @IsPositive()
+  @Max(1000000000000)
   amount?: number;
 
   @ValidateIf(
@@ -54,6 +59,7 @@ export class SubmitOrderBodyDto {
   )
   @IsNumber({ maxDecimalPlaces: 2 })
   @IsPositive()
+  @Max(99999999.99)
   @ValidateBy({
     name: 'priceOnlyForLimitOrder',
     validator: {
