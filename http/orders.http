@@ -68,11 +68,11 @@ Accept: application/json
 }
 
 ### Cancelar una orden en estado NEW creada previamente (CA1: 200 OK con status CANCELLED)
-PATCH {{baseUrl}}/orders/12/cancel
+PATCH {{baseUrl}}/orders/14/cancel
 Accept: application/json
 
 ### Cancelación repetida sobre una orden ya cancelada (CA2: 409 Conflict ORDER_NOT_CANCELLABLE)
-PATCH {{baseUrl}}/orders/12/cancel
+PATCH {{baseUrl}}/orders/14/cancel
 Accept: application/json
 
 ### Cancelar una orden inexistente (CA6: 404 Not Found ORDER_NOT_FOUND)

@@ -89,6 +89,6 @@ La columna `datetime` es `timestamp without time zone`. El driver `pg` convierte
 | Infraestructura | `typeorm-order.repository.int-spec.ts` | Inserción, reversión ante error, fecha en UTC y bloqueo por usuario |
 | Funcional | `test/functional/orders.spec.ts` | CA1 a CA29 por HTTP |
 
-## Nota para el README
+## Consideraciones para producción
 
 El bloqueo de la fila del usuario serializa sus órdenes y evita el doble gasto sin tocar el esquema. En producción se complementaría con una clave de idempotencia por pedido, para que un reintento del cliente no genere dos órdenes.

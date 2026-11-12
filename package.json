@@ -1,7 +1,7 @@
 {
   "name": "cocos-challenge-backend",
   "version": "0.0.1",
-  "description": "",
+  "description": "API REST que resuelve el backend challenge de Cocos Capital",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
@@ -10,18 +10,12 @@
   },
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
     "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
-    "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint": "eslint \"{src,test}/**/*.ts\"",
+    "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix",
     "test": "jest",
-    "test:watch": "jest --watch",
     "test:cov": "jest --config test/jest-cov.config.ts --coverage",
-    "test:functional": "jest --config test/jest-functional.config.ts",
-    "test:debug": "node --inspect-brk -r ts-node/register node_modules/.bin/jest --runInBand"
+    "test:functional": "jest --config test/jest-functional.config.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

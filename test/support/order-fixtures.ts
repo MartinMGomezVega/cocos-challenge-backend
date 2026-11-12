@@ -33,4 +33,7 @@ export async function insertTestOrders(
 
 export async function cleanupTestOrders(dataSource: DataSource): Promise<void> {
   await dataSource.query(`DELETE FROM orders WHERE id > 11`);
+  await dataSource.query(
+    `SELECT setval(pg_get_serial_sequence('orders', 'id'), 11, true)`,
+  );
 }

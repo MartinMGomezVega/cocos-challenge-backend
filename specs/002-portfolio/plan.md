@@ -49,6 +49,6 @@ http/portfolio.http
 | Infraestructura | `typeorm-*.repository.int-spec.ts` | Consultas contra la base de test |
 | Funcional | `test/functional/portfolio.spec.ts` | CA1 a CA10 por HTTP |
 
-## Nota para el README
+## Consideraciones para producción
 
 Calcular el portfolio leyendo todas las órdenes ejecutadas del usuario es correcto y simple para este volumen. En producción, con historiales largos, se mantendría un saldo y unas posiciones materializadas, actualizadas en la misma transacción que ejecuta cada orden.

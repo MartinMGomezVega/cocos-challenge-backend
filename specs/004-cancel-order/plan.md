@@ -36,6 +36,6 @@ http/orders.http                                              # se agregan ejemp
 | Infraestructura | `typeorm-order.repository.int-spec.ts` | `findById` y `cancelIfNew` contra la base, incluido que una orden no `NEW` no se modifica |
 | Funcional | `test/functional/cancel-order.spec.ts` | CA1 a CA10 por HTTP |
 
-## Nota para el README
+## Consideraciones para producción
 
 Sin autenticación, cualquier cliente puede cancelar cualquier orden conociendo su `id`. Con autenticación, el caso de uso verificaría que la orden pertenezca al usuario autenticado.
