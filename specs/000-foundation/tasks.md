@@ -14,7 +14,7 @@ Una por vez y en orden. En las tareas marcadas con **TDD**, primero el test en r
 - [x] **T4. Money (TDD).** Tests de construcción, rechazo de valores inválidos, suma, resta, multiplicación por entero, comparación, `toFixed2()` con redondeo half-up e inmutabilidad. Luego `src/domain/shared/money.ts`. Cubre CA7.
   Commit: `feat: add Money value object`
 
-- [ ] **T5. DomainError y filtro (TDD).** Tests de `DomainError` (lleva `code` y `message`) y del filtro (devuelve `{ code, message }` con el status indicado). Luego la implementación.
+- [x] **T5. DomainError y filtro (TDD).** Tests de `DomainError` (lleva `code` y `message`) y del filtro (devuelve `{ code, message }` con el status indicado). Luego la implementación.
   Commit: `feat: add domain error and http filter`
 
 - [ ] **T6. Base de test.** `docker-compose.yml` con el servicio `db-test`, `.env.test` y `test/support/assert-safe-database.ts` con su test (TDD): aborta con host `neon.tech`, pasa con `localhost`. Cubre CA8.

@@ -53,8 +53,9 @@ Esta fase **no expone ningún endpoint de negocio**.
 
 ### R4. Errores
 
-- `DomainError` es la clase base de los errores de negocio, con un `code` legible.
-- Un filtro global convierte cada `DomainError` en una respuesta JSON `{ "code", "message" }` con el status HTTP que corresponda.
+- `DomainError` es la clase base de los errores de negocio, con `code` (string legible), `message` y `kind`.
+- `kind` es una de cuatro categorías agnósticas de HTTP: `VALIDATION`, `NOT_FOUND`, `CONFLICT`, `UNPROCESSABLE`. El dominio no conoce códigos HTTP.
+- Un filtro global (`DomainErrorFilter` en `src/presentation/filters`) convierte cada `DomainError` en una respuesta JSON `{ "code", "message" }` traduciendo `kind` a status HTTP: `VALIDATION` → 400, `NOT_FOUND` → 404, `CONFLICT` → 409, `UNPROCESSABLE` → 422.
 - Los errores de validación de DTOs devuelven 400.
 
 ### R5. Base de test
