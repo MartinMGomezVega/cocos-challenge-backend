@@ -146,8 +146,9 @@ Poner en `.env` el connection string que venía en el mail del challenge:
 DATABASE_URL=postgresql://USUARIO:CONTRASEÑA@HOST/BASE?sslmode=require
 PORT=3000
 ```
+La deje comentada para que no se toque la base de datos que es compartida. Si se quiere usar esta opción, hay que descomentarla y comentar la opción B.
 
-Ojo que `POST /v1/orders` y `PATCH /v1/orders/:orderId/cancel` escriben en esa base, que es compartida.
+CUIDADO que `POST /v1/orders` y `PATCH /v1/orders/:orderId/cancel` modifican la base de datos que es compartida.
 
 ### Opción B: una base local con Docker
 
@@ -164,7 +165,7 @@ DATABASE_URL=postgresql://cocos:cocos@localhost:5433/cocos_test
 PORT=3000
 ```
 
-Es la que recomiendo para probar órdenes, porque no toca datos compartidos. Para volver a los datos originales:
+Es la que recomiendo para probar órdenes, porque no modifica los datos compartidos. Para volver a los datos originales:
 
 ```bash
 docker compose down -v
@@ -182,7 +183,7 @@ Queda en `http://localhost:3000`. Para correr la versión compilada: `npm run bu
 ## Tests
 
 ```bash
-npm test                    # unitarios (dominio y casos de uso). No necesita Docker.
+npm test                    # unitarios (dominio y casos de uso).
 
 docker compose up -d db-test
 npm run test:functional     # integración y funcionales por HTTP, contra Postgres
@@ -208,7 +209,7 @@ src/
 
 Las fórmulas del enunciado (pesos disponibles, tenencia, rendimiento, validación de una orden) son funciones puras dentro de `domain/` y se testean sin base de datos. El envío de órdenes usa las mismas funciones que el portfolio, así que no hay forma de que calculen distinto.
 
-## Decisiones y supuestos
+## IMPORTANTE: Decisiones y supuestos
 
 El enunciado pide documentar los supuestos. Estos son los que tomé y por qué.
 
@@ -259,10 +260,10 @@ El enunciado define el estado `CANCELLED` y la regla "solo se pueden cancelar la
 
 Lo dejé afuera a propósito porque excede el enunciado, pero lo tendría en cuenta:
 
-- **Idempotencia.** Si un cliente reintenta un pedido por un corte de red, hoy se crean dos órdenes. Se resuelve con una clave única por pedido (`Idempotency-Key`) guardada con un índice único, pero implica cambiar el esquema y el contrato del endpoint.
+- **Idempotencia.** Si un cliente reintenta un pedido por un corte de red, hoy se crean dos órdenes. Se resuelve con una clave única por pedido (`Idempotency-Key`) guardada con un índice único, pero implica cambiar el esquema y el contrato del endpoint. Por lo tanto, no lo aplique ya que modificaria la base de datos actual que es compartida para el ejercicio.
 - **Saldos y posiciones materializados.** Recalcular desde las órdenes está bien para este volumen. Con historiales largos mantendría saldos y posiciones actualizados en la misma transacción que ejecuta cada orden.
-- **Reserva de pesos y acciones para las órdenes `NEW`.** Hoy un usuario puede dejar varias LIMIT que juntas superen su saldo.
-- **Horario de rueda y días hábiles**, con calendario de feriados.
+- **Reserva de pesos y acciones para las órdenes `NEW`.** Hoy un usuario puede dejar varias órdenes que juntas superen su saldo.
+- **Horario de rueda y días hábiles.** Con calendario de feriados y horarios de apertura y cierre.
 - **Autenticación y autorización.** Entre otras cosas, para verificar que la orden que se cancela sea de quien la cancela.
 - **Índices** en `orders(userid, status)` y `marketdata(instrumentid, date)`.
 
@@ -270,9 +271,7 @@ Lo dejé afuera a propósito porque excede el enunciado, pero lo tendría en cue
 
 Lo desarrollé con Spec-Driven Development y TDD. Antes de cada funcionalidad escribí su especificación con los criterios de aceptación, después el plan técnico y las tareas, y recién ahí el código, siempre con el test primero y un commit por tarea. Todo eso está en la carpeta [`specs/`](specs/) y se puede seguir en el historial de commits.
 
-Usé IA como asistente para la implementación, guiada por esas especificaciones: revisé cada tarea contra sus criterios de aceptación antes de aceptarla.
-
-Si quieren ver el razonamiento detrás de cada decisión, estos son los archivos más útiles:
+Si quieren ver el razonamiento que tuve detrás de cada decisión, estos son los archivos más útiles:
 
 - [`specs/domain-context.md`](specs/domain-context.md): el esquema real, los datos, el portfolio del usuario 1 calculado a mano y la lista completa de supuestos.
 - [`specs/architecture.md`](specs/architecture.md): las reglas de arquitectura, manejo de dinero y testing.
