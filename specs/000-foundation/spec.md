@@ -43,10 +43,13 @@ Esta fase **no expone ningún endpoint de negocio**.
 
 ### R3. Money
 
-- Se construye desde `string`, `number` entero o `Decimal`; rechaza valores no numéricos.
-- Operaciones: sumar, restar, multiplicar por un entero, comparar.
-- `toFixed2()` devuelve un `string` con 2 decimales y redondeo half-up.
-- Es inmutable.
+- Constructor privado. Fábricas estáticas: `Money.from(value: string | number | Decimal)` y `Money.zero()`.
+- Validación en `from()`: acepta `number` solo si `Number.isSafeInteger`; acepta `string` solo si cumple `/^-?\d+(\.\d+)?$/`; acepta `Decimal` solo si es finito (`isFinite()`). Cualquier otro valor lanza `Error` con un mensaje claro. Los valores negativos son válidos.
+- Operaciones: `add(other: Money)`, `subtract(other: Money)`, `multiply(factor: number)`. `multiply` lanza `Error` si `factor` no es un entero seguro (`Number.isSafeInteger`). Todas devuelven una instancia nueva (inmutable).
+- Comparación: `equals(other: Money)`, `greaterThan(other: Money)`, `greaterThanOrEqual(other: Money)`, `lessThan(other: Money)`.
+- Lectura: `toDecimal(): Decimal` y `toFixed2(): string`.
+- Guarda precisión completa internamente; solo redondea en `toFixed2()`.
+- `toFixed2()` devuelve un `string` con 2 decimales y redondeo half-up pasando `Decimal.ROUND_HALF_UP` como argumento (sin modificar la configuración global `Decimal.set`). Los empates se alejan del cero (`0.005` → `"0.01"`, `-0.005` → `"-0.01"`) y nunca devuelve `"-0.00"` (`-0.004` → `"0.00"`).
 
 ### R4. Errores
 

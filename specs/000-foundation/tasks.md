@@ -11,7 +11,7 @@ Una por vez y en orden. En las tareas marcadas con **TDD**, primero el test en r
 - [x] **T3. Jest, coverage y lint.** Configurar la suite unitaria (`src/**/*.spec.ts`) y la funcional (`test/functional/*.spec.ts`), los scripts de `spec.md` R6 y los umbrales de coverage. Separar `lint` (verifica, sin `--fix`) de `lint:fix` (corrige). En ESLint, pasar a `error` las reglas `no-explicit-any`, `no-floating-promises` y `no-unsafe-argument`; si eso hace fallar `src/main.ts`, corregir solo la llamada a `bootstrap()` sin `await`.
   Commit: `chore: configure jest, coverage and lint`
 
-- [ ] **T4. Money (TDD).** Tests de construcción, rechazo de valores inválidos, suma, resta, multiplicación por entero, comparación, `toFixed2()` con redondeo half-up e inmutabilidad. Luego `src/domain/shared/money.ts`. Cubre CA7.
+- [x] **T4. Money (TDD).** Tests de construcción, rechazo de valores inválidos, suma, resta, multiplicación por entero, comparación, `toFixed2()` con redondeo half-up e inmutabilidad. Luego `src/domain/shared/money.ts`. Cubre CA7.
   Commit: `feat: add Money value object`
 
 - [ ] **T5. DomainError y filtro (TDD).** Tests de `DomainError` (lleva `code` y `message`) y del filtro (devuelve `{ code, message }` con el status indicado). Luego la implementación.
