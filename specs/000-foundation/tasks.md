@@ -5,7 +5,7 @@ Una por vez y en orden. En las tareas marcadas con **TDD**, primero el test en r
 - [x] **T1. Scaffold.** Crear el proyecto NestJS con TypeScript `strict`, ESLint y Prettier. Borrar el controller y el service de ejemplo. Crear la estructura de carpetas de `AGENTS.md`.
   Commit: `chore: scaffold nestjs project`
 
-- [ ] **T2. Repo seguro.** `.gitignore` con `.env`, `node_modules`, `dist`, `coverage`. Crear `.env.example` sin valores reales. Crear `.nvmrc` con `26` y agregar `"engines": { "node": ">=26 <27" }` a `package.json` (ver `spec.md` R1). Versionar `database/database.sql`, ya copiado desde el repo de Cocos (no se modifica); `specs/backend-challenge.md` ya está versionado.
+- [x] **T2. Repo seguro.** `.gitignore` con `.env`, `node_modules`, `dist`, `coverage`. Crear `.env.example` sin valores reales. Crear `.nvmrc` con `26` y agregar `"engines": { "node": ">=26 <27" }` a `package.json` (ver `spec.md` R1). Versionar `database/database.sql`, ya copiado desde el repo de Cocos (no se modifica); `specs/backend-challenge.md` ya está versionado.
   Commit: `chore: add env template and challenge sources`
 
 - [ ] **T3. Jest, coverage y lint.** Configurar la suite unitaria (`src/**/*.spec.ts`) y la funcional (`test/functional/*.spec.ts`), los scripts de `spec.md` R6 y los umbrales de coverage. Separar `lint` (verifica, sin `--fix`) de `lint:fix` (corrige). En ESLint, pasar a `error` las reglas `no-explicit-any`, `no-floating-promises` y `no-unsafe-argument`; si eso hace fallar `src/main.ts`, corregir solo la llamada a `bootstrap()` sin `await`.
