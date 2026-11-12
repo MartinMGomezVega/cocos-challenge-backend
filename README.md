@@ -74,7 +74,7 @@ Para probarlos y consultarlos hay tres recursos en el repo:
 |---|---|---|
 | Colección de Postman | [`postman/cocos-challenge-backend.postman_collection.json`](postman/cocos-challenge-backend.postman_collection.json) | Importar en Postman. La variable `baseUrl` apunta a `http://localhost:3000` |
 | Especificación OpenAPI 3 | [`openapi/openapi.yaml`](openapi/openapi.yaml) | Abrir en [editor.swagger.io](https://editor.swagger.io) o con cualquier visor de OpenAPI |
-| Swagger UI (GitHub Pages) | [`docs/`](docs/) | Abrir [`docs/index.html`](docs/index.html) o publicar desde GitHub Pages |
+| Documentación navegable | https://martinmgomezvega.github.io/cocos-challenge-backend/ | Swagger UI con todos los endpoints, sin instalar nada |
 
 ### Portfolio
 
