@@ -29,7 +29,7 @@ Una por vez y en orden. En las tareas marcadas con **TDD**, primero el test en r
 - [x] **T9. Entidades (TDD).** Tests contra la base de test para CA3, CA4, CA5 y CA6. Luego las cuatro entidades. Si los datos locales no coinciden con `specs/domain-context.md`, frenar y avisar.
   Commit: `feat: map database entities`
 
-- [ ] **T10. Arranque de la app.** `main.ts` con versionado URI `/v1`, `ValidationPipe` global y el filtro de errores. `test/support/test-app.ts` para los tests funcionales.
+- [x] **T10. Arranque de la app.** `main.ts` con versionado URI `/v1`, `ValidationPipe` global y el filtro de errores. `test/support/test-app.ts` para los tests funcionales.
   Commit: `feat: bootstrap app with versioning and validation`
 
 - [ ] **T11. Verificación final.** Correr `npm run lint`, `npm test`, `npm run test:functional` y `npm run test:cov`. Verificar CA10 con `git grep -i neon` y `git grep npg_`. Cubre CA9 y CA10.
