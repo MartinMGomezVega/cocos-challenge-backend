@@ -61,6 +61,7 @@ No hay autenticación (lo indica el enunciado).
 - Las columnas `numeric` llegan como `string`: convertir a `Decimal` con un transformer; nunca a `number`.
 - Los `id` se generan por secuencia.
 - **Prohibido** crear, alterar o borrar tablas, columnas o índices.
+- Criterio de acceso a datos: se usan entidades de TypeORM para operaciones simples (existencia de usuario, lectura de movimientos `FILLED` y bloqueo pesimista sobre `users`) y SQL parametrizado explícito en las tres consultas donde el ORM no ayuda (último precio por instrumento con `LEFT JOIN LATERAL`, inserción de la orden con `datetime` en UTC explícito, y lectura/cancelación de órdenes devolviendo `datetime` en UTC).
 
 ## 5. Dinero y números
 
