@@ -1,0 +1,68 @@
+@baseUrl = http://localhost:3000/v1
+
+### Orden MARKET por cantidad de acciones (CA1: BUY 10 PAMP -> FILLED)
+POST {{baseUrl}}/orders
+Content-Type: application/json
+Accept: application/json
+
+{
+  "userId": 1,
+  "instrumentId": 47,
+  "side": "BUY",
+  "type": "MARKET",
+  "size": 10
+}
+
+### Orden MARKET por monto en pesos (CA5: BUY por 50000 ARS en PAMP -> FILLED, size 54)
+POST {{baseUrl}}/orders
+Content-Type: application/json
+Accept: application/json
+
+{
+  "userId": 1,
+  "instrumentId": 47,
+  "side": "BUY",
+  "type": "MARKET",
+  "amount": 50000
+}
+
+### Orden LIMIT con precio límite (CA3: BUY 5 PAMP a 900 -> NEW)
+POST {{baseUrl}}/orders
+Content-Type: application/json
+Accept: application/json
+
+{
+  "userId": 1,
+  "instrumentId": 47,
+  "side": "BUY",
+  "type": "LIMIT",
+  "size": 5,
+  "price": 900
+}
+
+### Orden rechazada por fondos insuficientes (CA10: 201 Created con status REJECTED)
+POST {{baseUrl}}/orders
+Content-Type: application/json
+Accept: application/json
+
+{
+  "userId": 1,
+  "instrumentId": 47,
+  "side": "BUY",
+  "type": "MARKET",
+  "size": 814
+}
+
+### Error de validación: MARKET con price no permitido (CA20: 400 Bad Request)
+POST {{baseUrl}}/orders
+Content-Type: application/json
+Accept: application/json
+
+{
+  "userId": 1,
+  "instrumentId": 47,
+  "side": "BUY",
+  "type": "MARKET",
+  "size": 10,
+  "price": 900
+}
