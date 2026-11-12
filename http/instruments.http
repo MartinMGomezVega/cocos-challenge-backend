@@ -1,0 +1,37 @@
+@baseUrl = http://localhost:3000/v1
+
+### Buscar por ticker (CA1 / CA2: PAMP)
+GET {{baseUrl}}/instruments?query=pamp
+Accept: application/json
+
+### Buscar por nombre (CA3: Banco Macro -> BMA)
+GET {{baseUrl}}/instruments?query=macro
+Accept: application/json
+
+### Buscar por ticker/nombre parcial con retorno negativo (CA4: METR)
+GET {{baseUrl}}/instruments?query=metr
+Accept: application/json
+
+### Listado paginado por defecto (CA5: página 1, límite 20, total 65)
+GET {{baseUrl}}/instruments
+Accept: application/json
+
+### Paginado: última página con resultados (CA6: página 4, 5 resultados)
+GET {{baseUrl}}/instruments?page=4&limit=20
+Accept: application/json
+
+### Paginado: página más allá de la última (CA7: data vacía)
+GET {{baseUrl}}/instruments?page=5&limit=20
+Accept: application/json
+
+### Sin resultados (CA9)
+GET {{baseUrl}}/instruments?query=zzzzzz
+Accept: application/json
+
+### Parámetro inválido: error 400 Bad Request (CA12)
+GET {{baseUrl}}/instruments?page=0
+Accept: application/json
+
+### Parámetro desconocido: error 400 Bad Request (CA12)
+GET {{baseUrl}}/instruments?foo=1
+Accept: application/json
