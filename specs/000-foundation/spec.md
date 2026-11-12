@@ -9,7 +9,7 @@ Esta fase **no expone ningún endpoint de negocio**.
 ## Alcance
 
 1. Proyecto NestJS con TypeScript `strict`, ESLint y Prettier.
-2. Estructura de carpetas horizontal definida en `AGENTS.md`.
+2. Estructura de carpetas horizontal definida en `specs/architecture.md`.
 3. Configuración por variables de entorno, validada al arrancar.
 4. Conexión a PostgreSQL con TypeORM (`synchronize: false`).
 5. Entidades TypeORM para `users`, `instruments`, `orders` y `marketdata`.

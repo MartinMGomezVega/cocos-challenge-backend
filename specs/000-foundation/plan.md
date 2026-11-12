@@ -1,6 +1,6 @@
 # Plan 000 — Foundation
 
-Cómo se implementa `spec.md`. Respeta `AGENTS.md`.
+Cómo se implementa `spec.md`. Respeta `specs/architecture.md`.
 
 ## Dependencias
 
