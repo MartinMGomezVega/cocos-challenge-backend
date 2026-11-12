@@ -1,20 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { UserRepository } from '../../application/ports/user.repository';
-
-interface RawExistsRow {
-  exists: boolean;
-}
+import { UserEntity } from '../entities/user.entity';
 
 @Injectable()
 export class TypeOrmUserRepository implements UserRepository {
-  constructor(private readonly dataSource: DataSource) {}
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+  ) {}
 
   async exists(userId: number): Promise<boolean> {
-    const rows = await this.dataSource.query<RawExistsRow[]>(
-      `SELECT EXISTS(SELECT 1 FROM users WHERE id = $1) AS exists`,
-      [userId],
-    );
-    return rows[0].exists;
+    return this.userRepository.existsBy({ id: userId });
   }
 }

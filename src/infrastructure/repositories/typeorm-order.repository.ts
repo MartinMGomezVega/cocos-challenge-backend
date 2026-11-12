@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Decimal } from 'decimal.js';
-import { DataSource, EntityManager } from 'typeorm';
+import { DataSource, IsNull, Not, Repository } from 'typeorm';
 import {
   OrderRepository,
   PendingOrderDecision,
@@ -16,17 +17,8 @@ import {
   MovementSide,
 } from '../../domain/portfolio/account-movement';
 import { DomainError } from '../../domain/shared/domain-error';
-
-interface RawOrderMovementRow {
-  instrumentid: number;
-  side: MovementSide;
-  size: number;
-  price: string;
-}
-
-interface RawUserIdRow {
-  id: number;
-}
+import { OrderEntity } from '../entities/order.entity';
+import { UserEntity } from '../entities/user.entity';
 
 interface RawInsertedOrderRow {
   id: number;
@@ -61,36 +53,46 @@ function mapRawOrderRow(row: RawOrderRow): Order {
 }
 
 async function queryFilledMovements(
-  executor: DataSource | EntityManager,
+  orderRepository: Repository<OrderEntity>,
   userId: number,
 ): Promise<AccountMovement[]> {
-  const rows = await executor.query<RawOrderMovementRow[]>(
-    `SELECT instrumentid, side, size, price
-     FROM orders
-     WHERE userid = $1
-       AND status = 'FILLED'
-       AND instrumentid IS NOT NULL
-       AND side IS NOT NULL
-       AND size IS NOT NULL
-       AND price IS NOT NULL
-     ORDER BY id ASC`,
-    [userId],
-  );
+  const rows = await orderRepository.find({
+    select: {
+      id: true,
+      instrumentId: true,
+      side: true,
+      size: true,
+      price: true,
+    },
+    where: {
+      userId,
+      status: 'FILLED',
+      instrumentId: Not(IsNull()),
+      side: Not(IsNull()),
+      size: Not(IsNull()),
+      price: Not(IsNull()),
+    },
+    order: { id: 'ASC' },
+  });
 
   return rows.map((row) => ({
-    instrumentId: row.instrumentid,
-    side: row.side,
-    size: row.size,
-    price: new Decimal(row.price),
+    instrumentId: row.instrumentId!,
+    side: row.side as MovementSide,
+    size: row.size!,
+    price: row.price!,
   }));
 }
 
 @Injectable()
 export class TypeOrmOrderRepository implements OrderRepository {
-  constructor(private readonly dataSource: DataSource) {}
+  constructor(
+    private readonly dataSource: DataSource,
+    @InjectRepository(OrderEntity)
+    private readonly orderRepository: Repository<OrderEntity>,
+  ) {}
 
   async findFilledMovementsByUser(userId: number): Promise<AccountMovement[]> {
-    return queryFilledMovements(this.dataSource, userId);
+    return queryFilledMovements(this.orderRepository, userId);
   }
 
   async submitAtomically(
@@ -100,11 +102,12 @@ export class TypeOrmOrderRepository implements OrderRepository {
     ) => PendingOrderDecision | Promise<PendingOrderDecision>,
   ): Promise<Order> {
     return this.dataSource.transaction(async (manager) => {
-      const userRows = await manager.query<RawUserIdRow[]>(
-        `SELECT id FROM users WHERE id = $1 FOR UPDATE`,
-        [userId],
-      );
-      if (userRows.length === 0) {
+      const user = await manager.findOne(UserEntity, {
+        select: { id: true },
+        where: { id: userId },
+        lock: { mode: 'pessimistic_write' },
+      });
+      if (!user) {
         throw new DomainError(
           'USER_NOT_FOUND',
           `User ${userId} was not found`,
@@ -112,7 +115,10 @@ export class TypeOrmOrderRepository implements OrderRepository {
         );
       }
 
-      const movements = await queryFilledMovements(manager, userId);
+      const movements = await queryFilledMovements(
+        manager.getRepository(OrderEntity),
+        userId,
+      );
       const decision = await decide(movements);
 
       const insertedRows = await manager.query<RawInsertedOrderRow[]>(

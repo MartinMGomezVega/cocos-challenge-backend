@@ -1,8 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { InstrumentEntity } from '../entities/instrument.entity';
+import { MarketDataEntity } from '../entities/market-data.entity';
+import { OrderEntity } from '../entities/order.entity';
+import { UserEntity } from '../entities/user.entity';
 import { shouldUseDatabaseSsl, validateEnv } from './env.validation';
 
+@Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -25,6 +30,13 @@ import { shouldUseDatabaseSsl, validateEnv } from './env.validation';
         };
       },
     }),
+    TypeOrmModule.forFeature([
+      UserEntity,
+      InstrumentEntity,
+      OrderEntity,
+      MarketDataEntity,
+    ]),
   ],
+  exports: [TypeOrmModule],
 })
 export class DatabaseModule {}
