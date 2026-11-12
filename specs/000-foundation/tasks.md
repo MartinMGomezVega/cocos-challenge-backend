@@ -20,7 +20,7 @@ Una por vez y en orden. En las tareas marcadas con **TDD**, primero el test en r
 - [x] **T6. Base de test.** `docker-compose.yml` con el servicio `db-test`, `.env.test` y `test/support/assert-safe-database.ts` con su test (TDD): aborta con host `neon.tech`, pasa con `localhost`. Cubre CA8.
   Commit: `chore: add local test database and safety guard`
 
-- [ ] **T7. Configuración y conexión (TDD).** Test de `env.validation.ts`: falla sin `DATABASE_URL`, acepta `PORT` opcional. Luego `database.module.ts` con SSL condicional. Cubre CA1 y CA2.
+- [x] **T7. Configuración y conexión (TDD).** Test de `env.validation.ts`: falla sin `DATABASE_URL`, acepta `PORT` opcional. Luego `database.module.ts` con SSL condicional. Cubre CA1 y CA2.
   Commit: `feat: add validated config and database connection`
 
 - [ ] **T8. Transformer decimal (TDD).** Tests: `"930.00"` → `Decimal(930)`, `null` → `null`, y el camino inverso.
