@@ -5,7 +5,12 @@ import {
   OrderRepository,
   PendingOrderDecision,
 } from '../../application/ports/order.repository';
-import { Order } from '../../domain/orders/order';
+import {
+  Order,
+  OrderSide,
+  OrderStatus,
+  OrderType,
+} from '../../domain/orders/order';
 import {
   AccountMovement,
   MovementSide,
@@ -26,6 +31,33 @@ interface RawUserIdRow {
 interface RawInsertedOrderRow {
   id: number;
   datetime_iso: string;
+}
+
+interface RawOrderRow {
+  id: number;
+  userid: number;
+  instrumentid: number;
+  side: OrderSide;
+  type: OrderType;
+  size: number;
+  price: string;
+  status: OrderStatus;
+  datetime_iso: string;
+}
+
+function mapRawOrderRow(row: RawOrderRow): Order {
+  return {
+    id: row.id,
+    userId: row.userid,
+    instrumentId: row.instrumentid,
+    side: row.side,
+    type: row.type,
+    size: row.size,
+    price: new Decimal(row.price),
+    status: row.status,
+    rejectionReason: null,
+    datetime: new Date(row.datetime_iso),
+  };
 }
 
 async function queryFilledMovements(
@@ -111,5 +143,38 @@ export class TypeOrmOrderRepository implements OrderRepository {
         datetime: new Date(insertedRows[0].datetime_iso),
       };
     });
+  }
+
+  async findById(orderId: number): Promise<Order | null> {
+    const rows = await this.dataSource.query<RawOrderRow[]>(
+      `SELECT id, userid, instrumentid, side, type, size, price, status,
+              to_char(datetime, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') AS datetime_iso
+       FROM orders
+       WHERE id = $1`,
+      [orderId],
+    );
+
+    if (rows.length === 0) {
+      return null;
+    }
+
+    return mapRawOrderRow(rows[0]);
+  }
+
+  async cancelIfNew(orderId: number): Promise<Order | null> {
+    const [rows] = await this.dataSource.query<[RawOrderRow[], number]>(
+      `UPDATE orders
+       SET status = 'CANCELLED'
+       WHERE id = $1 AND status = 'NEW'
+       RETURNING id, userid, instrumentid, side, type, size, price, status,
+                 to_char(datetime, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') AS datetime_iso`,
+      [orderId],
+    );
+
+    if (rows.length === 0) {
+      return null;
+    }
+
+    return mapRawOrderRow(rows[0]);
   }
 }

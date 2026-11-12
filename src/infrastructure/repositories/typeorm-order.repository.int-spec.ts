@@ -358,4 +358,60 @@ describe('TypeOrmOrderRepository (integration)', () => {
       await user2Promise;
     });
   });
+
+  describe('findById and cancelIfNew', () => {
+    it('findById returns the order when it exists and null when it does not exist', async () => {
+      const existing = await repository.findById(2);
+      expect(existing).not.toBeNull();
+      expect(existing?.id).toBe(2);
+      expect(existing?.userId).toBe(1);
+      expect(existing?.instrumentId).toBe(47);
+      expect(existing?.side).toBe('BUY');
+      expect(existing?.type).toBe('MARKET');
+      expect(existing?.size).toBe(50);
+      expect(existing?.price).toEqual(new Decimal('930.00'));
+      expect(existing?.status).toBe('FILLED');
+      expect(existing?.rejectionReason).toBeNull();
+      expect(existing?.datetime).toBeInstanceOf(Date);
+
+      const missing = await repository.findById(99999);
+      expect(missing).toBeNull();
+    });
+
+    it('cancelIfNew transitions a NEW order (inserted by the test) to CANCELLED without changing other fields', async () => {
+      const created = await repository.submitAtomically(1, () => ({
+        instrumentId: 47,
+        side: 'BUY',
+        type: 'LIMIT',
+        size: 5,
+        price: new Decimal('900.00'),
+        status: 'NEW',
+        rejectionReason: null,
+      }));
+
+      const cancelled = await repository.cancelIfNew(created.id);
+
+      expect(cancelled).toEqual({
+        ...created,
+        status: 'CANCELLED',
+      });
+
+      const fromDb = await repository.findById(created.id);
+      expect(fromDb).toEqual({
+        ...created,
+        status: 'CANCELLED',
+      });
+    });
+
+    it('cancelIfNew returns null and does not modify an order that is not in NEW status', async () => {
+      const before = await repository.findById(2);
+      expect(before?.status).toBe('FILLED');
+
+      const result = await repository.cancelIfNew(2);
+      expect(result).toBeNull();
+
+      const after = await repository.findById(2);
+      expect(after).toEqual(before);
+    });
+  });
 });

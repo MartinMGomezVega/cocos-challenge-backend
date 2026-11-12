@@ -18,4 +18,6 @@ export interface OrderRepository {
       movements: AccountMovement[],
     ) => PendingOrderDecision | Promise<PendingOrderDecision>,
   ): Promise<Order>;
+  findById(orderId: number): Promise<Order | null>;
+  cancelIfNew(orderId: number): Promise<Order | null>;
 }

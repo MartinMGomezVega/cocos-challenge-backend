@@ -40,6 +40,14 @@ class FakeOrderRepository implements OrderRepository {
   submitAtomically(): ReturnType<OrderRepository['submitAtomically']> {
     return Promise.reject(new Error('Not implemented'));
   }
+
+  findById(): ReturnType<OrderRepository['findById']> {
+    return Promise.resolve(null);
+  }
+
+  cancelIfNew(): ReturnType<OrderRepository['cancelIfNew']> {
+    return Promise.resolve(null);
+  }
 }
 
 class FakeInstrumentRepository implements InstrumentRepository {

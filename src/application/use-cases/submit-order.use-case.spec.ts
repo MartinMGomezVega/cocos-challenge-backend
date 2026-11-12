@@ -91,6 +91,14 @@ class FakeOrderRepository implements OrderRepository {
       datetime: new Date('2026-11-12T16:40:00.000Z'),
     });
   }
+
+  findById(): ReturnType<OrderRepository['findById']> {
+    return Promise.resolve(null);
+  }
+
+  cancelIfNew(): ReturnType<OrderRepository['cancelIfNew']> {
+    return Promise.resolve(null);
+  }
 }
 
 const PAMP = new Instrument(
