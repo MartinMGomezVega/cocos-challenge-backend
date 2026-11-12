@@ -20,7 +20,11 @@ export class CancelOrderUseCase {
 
     const cancelledOrder = await this.orderRepository.cancelIfNew(orderId);
     if (!cancelledOrder) {
-      assertCancellable({ ...order, status: 'CANCELLED' });
+      throw new DomainError(
+        'ORDER_NOT_CANCELLABLE',
+        `Order ${orderId} is no longer in NEW status and cannot be cancelled`,
+        'CONFLICT',
+      );
     }
 
     return cancelledOrder;

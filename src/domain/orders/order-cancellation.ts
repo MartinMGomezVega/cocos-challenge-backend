@@ -1,10 +1,6 @@
 import { DomainError } from '../shared/domain-error';
 import { Order } from './order';
 
-export function assertCancellable(
-  order: Order & { readonly status: Exclude<Order['status'], 'NEW'> },
-): never;
-export function assertCancellable(order: Order): void;
 export function assertCancellable(order: Order): void {
   if (order.status !== 'NEW') {
     throw new DomainError(

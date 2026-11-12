@@ -526,5 +526,44 @@ describe('decideOrder', () => {
         });
       }
     });
+
+    it('throws DomainError VALIDATION when type is LIMIT and limitPrice is missing', () => {
+      try {
+        decideOrder({
+          instrumentId: PAMP_ID,
+          side: 'BUY',
+          type: 'LIMIT',
+          size: 5,
+          marketPrice: PAMP_CLOSE,
+          movements: USER_1_FILLED_MOVEMENTS,
+        });
+        throw new Error('Expected decideOrder to throw');
+      } catch (err) {
+        expect(err).toBeInstanceOf(DomainError);
+        expect(err).toMatchObject({
+          kind: 'VALIDATION',
+          code: 'MISSING_LIMIT_PRICE',
+        });
+      }
+    });
+
+    it('throws DomainError VALIDATION when both size and amount are missing', () => {
+      try {
+        decideOrder({
+          instrumentId: PAMP_ID,
+          side: 'BUY',
+          type: 'MARKET',
+          marketPrice: PAMP_CLOSE,
+          movements: USER_1_FILLED_MOVEMENTS,
+        });
+        throw new Error('Expected decideOrder to throw');
+      } catch (err) {
+        expect(err).toBeInstanceOf(DomainError);
+        expect(err).toMatchObject({
+          kind: 'VALIDATION',
+          code: 'MISSING_ORDER_QUANTITY',
+        });
+      }
+    });
   });
 });

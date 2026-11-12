@@ -38,13 +38,28 @@ export function decideOrder(input: DecideOrderInput): OrderDecision {
     }
     price = input.marketPrice;
   } else {
-    price = input.limitPrice!;
+    if (input.limitPrice === undefined) {
+      throw new DomainError(
+        'MISSING_LIMIT_PRICE',
+        'limitPrice is required for LIMIT orders',
+        'VALIDATION',
+      );
+    }
+    price = input.limitPrice;
   }
 
-  const size =
-    input.size !== undefined
-      ? input.size
-      : input.amount!.dividedBy(price).floor().toNumber();
+  let size: number;
+  if (input.size !== undefined) {
+    size = input.size;
+  } else if (input.amount !== undefined) {
+    size = input.amount.dividedBy(price).floor().toNumber();
+  } else {
+    throw new DomainError(
+      'MISSING_ORDER_QUANTITY',
+      'Either size or amount must be provided',
+      'VALIDATION',
+    );
+  }
 
   if (size > MAX_ORDER_SIZE) {
     throw new DomainError(

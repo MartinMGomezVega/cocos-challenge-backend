@@ -104,14 +104,23 @@ describe('CancelOrderUseCase', () => {
     });
   });
 
-  it('throws ORDER_NOT_CANCELLABLE (CONFLICT) when cancelIfNew returns null due to a lost race', async () => {
+  it('throws ORDER_NOT_CANCELLABLE (CONFLICT) when cancelIfNew returns null due to a lost race without asserting an unverified status', async () => {
     orderRepo.setOrder(makeOrder(12, 'NEW'));
     orderRepo.simulateLostRaceOnCancel();
 
-    await expect(useCase.execute(12)).rejects.toMatchObject({
+    let caughtError: unknown;
+    try {
+      await useCase.execute(12);
+    } catch (err) {
+      caughtError = err;
+    }
+
+    expect(caughtError).toBeInstanceOf(DomainError);
+    expect(caughtError).toMatchObject({
       kind: 'CONFLICT',
       code: 'ORDER_NOT_CANCELLABLE',
     });
+    expect((caughtError as DomainError).message).not.toContain('CANCELLED');
     expect(orderRepo.cancelIfNewCalls).toBe(1);
   });
 });
