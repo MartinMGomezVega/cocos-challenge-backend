@@ -32,7 +32,7 @@ Esta fase **no expone ningún endpoint de negocio**.
 - Si falta `DATABASE_URL`, la app no arranca y muestra un error claro.
 - `.env` está en `.gitignore`. `.env.example` lista las variables sin valores reales.
 - La conexión usa SSL cuando el host no es local.
-- La versión de Node se fija en la LTS v26.13.1: archivo `.nvmrc` con `v26.13.1` y campo `"engines": { "node": ">=26.13.1 <27" }` en `package.json`.
+- La versión de Node se fija en la LTS 26: archivo `.nvmrc` con `26` y campo `"engines": { "node": ">=26 <27" }` en `package.json`.
 
 ### R2. Entidades
 
@@ -63,7 +63,9 @@ Esta fase **no expone ningún endpoint de negocio**.
 
 ### R6. Calidad
 
-- Scripts: `start:dev`, `build`, `lint`, `test`, `test:functional`, `test:cov`.
+- Scripts: `start:dev`, `build`, `lint`, `lint:fix`, `test`, `test:functional`, `test:cov`.
+- `lint` solo verifica (sin `--fix`); `lint:fix` corrige.
+- ESLint marca como **error** `@typescript-eslint/no-explicit-any`, `@typescript-eslint/no-floating-promises` y `@typescript-eslint/no-unsafe-argument`.
 - Umbrales de coverage: 90 % global y 100 % en `src/domain`. Excluidos: `main.ts`, `*.module.ts`, `*.entity.ts`, `*.dto.ts`.
 
 ## Criterios de aceptación

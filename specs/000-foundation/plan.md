@@ -22,7 +22,7 @@ Cómo se implementa `spec.md`. Respeta `AGENTS.md`.
 ## Archivos a crear
 
 ```
-.nvmrc                                # versión de Node LTS (v26.13.1)
+.nvmrc                                # versión de Node LTS (26)
 .env.example
 .env.test
 .gitignore
