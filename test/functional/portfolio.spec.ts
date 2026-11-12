@@ -29,6 +29,7 @@ describe('GET /v1/users/:userId/portfolio (CA1-CA10)', () => {
   beforeAll(async () => {
     app = (await createTestApp()) as INestApplication<App>;
     dataSource = app.get(DataSource);
+    await cleanupTestOrders(dataSource);
   });
 
   afterEach(async () => {

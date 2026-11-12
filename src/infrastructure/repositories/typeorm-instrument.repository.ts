@@ -120,4 +120,14 @@ export class TypeOrmInstrumentRepository implements InstrumentRepository {
     const rows = await this.dataSource.query<RawInstrumentRow[]>(sql, [ids]);
     return rows.map(mapRowToInstrument);
   }
+
+  async findById(id: number): Promise<Instrument | null> {
+    const sql = `
+      ${SELECT_INSTRUMENTS_WITH_LATEST_MARKET_DATA}
+      WHERE i.id = $1
+    `;
+
+    const rows = await this.dataSource.query<RawInstrumentRow[]>(sql, [id]);
+    return rows.length > 0 ? mapRowToInstrument(rows[0]) : null;
+  }
 }

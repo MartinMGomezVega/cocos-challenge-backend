@@ -14,6 +14,8 @@ export interface OrderRepository {
   findFilledMovementsByUser(userId: number): Promise<AccountMovement[]>;
   submitAtomically(
     userId: number,
-    decide: (movements: AccountMovement[]) => PendingOrderDecision,
+    decide: (
+      movements: AccountMovement[],
+    ) => PendingOrderDecision | Promise<PendingOrderDecision>,
   ): Promise<Order>;
 }

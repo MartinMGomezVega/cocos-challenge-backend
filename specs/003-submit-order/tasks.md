@@ -8,7 +8,7 @@ Una por vez y en orden. En las tareas **TDD**, primero el test en rojo. Un commi
 - [x] **T2. Caso de uso (TDD).** `findById` en el puerto de instrumentos, `submitAtomically` en el puerto de órdenes y `SubmitOrderUseCase` con repositorios falsos. Casos: `USER_NOT_FOUND`, `INSTRUMENT_NOT_FOUND`, `INSTRUMENT_NOT_TRADABLE`, `MARKET_PRICE_UNAVAILABLE` (sin llegar al puerto de órdenes en ninguno de los cuatro), orden aceptada y orden rechazada.
   Commit: `feat: add submit order use case`
 
-- [ ] **T3. Repositorio atómico (TDD).** Tests `*.int-spec.ts` y luego la implementación de `submitAtomically` y `findById`. Casos: inserta y devuelve la orden con su `id`; si `decide` lanza un error no queda ninguna fila; `datetime` se graba en UTC; dos llamadas simultáneas del mismo usuario se ejecutan una después de la otra (la segunda ve la orden de la primera).
+- [x] **T3. Repositorio atómico (TDD).** Tests `*.int-spec.ts` y luego la implementación de `submitAtomically` y `findById`. Casos: inserta y devuelve la orden con su `id`; si `decide` lanza un error no queda ninguna fila; `datetime` se graba en UTC; dos llamadas simultáneas del mismo usuario se ejecutan una después de la otra (la segunda ve la orden de la primera).
   Commit: `feat: add atomic order submission`
 
 - [ ] **T4. Endpoint (TDD).** `test/functional/orders.spec.ts` con CA1 a CA29; luego DTOs, controller y `src/composition/orders.module.ts`. Los casos que verifican el portfolio lo consultan por HTTP después de enviar la orden.

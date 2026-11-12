@@ -222,4 +222,28 @@ describe('TypeOrmInstrumentRepository (integration)', () => {
       }
     });
   });
+
+  describe('findById', () => {
+    it('returns the instrument with its latest marketPrice when it exists (including MONEDA)', async () => {
+      const pamp = await repository.findById(47);
+      expect(pamp).toBeInstanceOf(Instrument);
+      expect(pamp?.id).toBe(47);
+      expect(pamp?.ticker).toBe('PAMP');
+      expect(pamp?.type).toBe('ACCIONES');
+      expect(pamp?.marketPrice?.close).toEqual(new Decimal('925.85'));
+      expect(pamp?.marketPrice?.previousClose).toEqual(new Decimal('921.80'));
+
+      const ars = await repository.findById(66);
+      expect(ars).toBeInstanceOf(Instrument);
+      expect(ars?.id).toBe(66);
+      expect(ars?.ticker).toBe('ARS');
+      expect(ars?.type).toBe('MONEDA');
+      expect(ars?.marketPrice).toBeNull();
+    });
+
+    it('returns null when the instrument does not exist', async () => {
+      const missing = await repository.findById(9999);
+      expect(missing).toBeNull();
+    });
+  });
 });
