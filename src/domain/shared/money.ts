@@ -1,4 +1,5 @@
 import { Decimal } from 'decimal.js';
+import { toFixed2 } from './decimal-format';
 
 const NUMERIC_STRING_PATTERN = /^-?\d+(\.\d+)?$/;
 
@@ -75,7 +76,6 @@ export class Money {
   }
 
   toFixed2(): string {
-    const formatted = this.value.toFixed(2, Decimal.ROUND_HALF_UP);
-    return formatted === '-0.00' ? '0.00' : formatted;
+    return toFixed2(this.value);
   }
 }

@@ -5,7 +5,7 @@ Una por vez y en orden. En las tareas **TDD**, primero el test en rojo. Un commi
 - [x] **T1. Base de test disponible.** `test/support/assert-database-reachable.ts` y su llamada desde el `globalSetup` de las suites funcional y de coverage. Verificar CA13 apuntando `DATABASE_URL` a un puerto local sin servicio (por ejemplo `localhost:5999`) y mostrar el mensaje.
   Commit: `chore: fail fast when test database is unreachable`
 
-- [ ] **T2. Formato de decimales (TDD).** `decimal-format.ts` con sus tests (half-up, empates que se alejan del cero, nunca `"-0.00"`). Refactor de `Money.toFixed2()` para delegar, con sus tests existentes en verde y sin modificarlos.
+- [x] **T2. Formato de decimales (TDD).** `decimal-format.ts` con sus tests (half-up, empates que se alejan del cero, nunca `"-0.00"`). Refactor de `Money.toFixed2()` para delegar, con sus tests existentes en verde y sin modificarlos.
   Commit: `refactor: share two-decimal formatting`
 
 - [ ] **T3. Dominio (TDD).** `MarketPrice` con `dailyReturn()` e `Instrument`. Casos: PAMP (925.85 y 921.80 → 0.44 al formatear), METR (−1.08), BMA (−1.15), `previousClose` `null`, `previousClose` 0.
