@@ -141,4 +141,46 @@ describe('TypeOrmInstrumentRepository (integration)', () => {
 
     expect(itemsWithNullPrice).toEqual(expectedIds);
   });
+
+  it('maps previousClose as null when latest marketdata has close present and previousclose NULL', async () => {
+    const rowsWithoutMarketData: Array<{ id: number; ticker: string }> =
+      await dataSource.query(
+        `SELECT i.id, i.ticker
+         FROM instruments i
+         LEFT JOIN marketdata m ON m.instrumentid = i.id
+         WHERE i.type <> 'MONEDA' AND m.id IS NULL
+         ORDER BY i.id ASC
+         LIMIT 1`,
+      );
+
+    const target = rowsWithoutMarketData[0];
+    expect(target).toBeDefined();
+
+    const insertedRows: Array<{ id: number }> = await dataSource.query(
+      `INSERT INTO marketdata (instrumentid, high, low, open, close, previousclose, date)
+       VALUES ($1, NULL, NULL, NULL, 150.25, NULL, '2023-07-14')
+       RETURNING id`,
+      [target.id],
+    );
+    const insertedId = insertedRows[0].id;
+
+    try {
+      const result = await repository.search({
+        query: target.ticker,
+        page: 1,
+        limit: 20,
+      });
+
+      const found = result.items.find((item) => item.id === target.id);
+      expect(found).toBeDefined();
+      expect(found?.marketPrice).not.toBeNull();
+      expect(found?.marketPrice?.close).toEqual(new Decimal('150.25'));
+      expect(found?.marketPrice?.previousClose).toBeNull();
+      expect(found?.marketPrice?.dailyReturn()).toBeNull();
+    } finally {
+      await dataSource.query(`DELETE FROM marketdata WHERE id = $1`, [
+        insertedId,
+      ]);
+    }
+  });
 });

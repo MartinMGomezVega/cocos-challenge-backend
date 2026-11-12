@@ -84,7 +84,7 @@ export class TypeOrmInstrumentRepository implements InstrumentRepository {
       this.dataSource.query<RawInstrumentRow[]>(dataSql, dataParams),
     ]);
 
-    const total = Number(countRows[0]?.total ?? '0');
+    const total = Number(countRows[0].total);
     const items = dataRows.map((row) => {
       const marketPrice =
         row.close !== null
