@@ -9,7 +9,7 @@ const config: Config = {
     '<rootDir>/test/functional/*.spec.ts',
   ],
   maxWorkers: 1,
-  globalSetup: '<rootDir>/test/support/global-setup.ts',
+  globalSetup: '<rootDir>/test/support/global-setup-db.ts',
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },

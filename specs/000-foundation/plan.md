@@ -17,7 +17,7 @@ Cómo se implementa `spec.md`. Respeta `specs/architecture.md`.
 | `ts-node` (dev) | Necesario para que Jest lea `jest.config.ts` |
 | `eslint`, `prettier` (dev) | Calidad |
 | `typescript-eslint`, `@eslint/js`, `globals`, `eslint-config-prettier`, `eslint-plugin-prettier` (dev) | Configuración de ESLint para TypeScript + Prettier |
-| `@types/node`, `@types/express`, `@types/jest`, `@types/supertest` (dev) | Tipos |
+| `@types/node`, `@types/express`, `@types/jest`, `@types/supertest`, `@types/pg` (dev) | Tipos |
 
 ## Archivos a crear
 
