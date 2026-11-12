@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cocos Challenge Backend — API</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css" />
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #load-error {
+      display: none;
+      font-family: sans-serif;
+      padding: 24px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="swagger-ui"></div>
+  <p id="load-error">
+    No se pudo cargar Swagger UI. Verificá la conexión a internet y que el
+    navegador no esté bloqueando scripts externos. La especificación está en
+    <code>openapi/openapi.yaml</code>.
+  </p>
+
+  <script>
+    var SPEC_URL =
+      'https://raw.githubusercontent.com/MartinMGomezVega/cocos-challenge-backend/main/openapi/openapi.yaml';
+
+    // Swagger UI se carga desde un CDN, con un segundo CDN de respaldo.
+    var BUNDLE_URLS = [
+      'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js',
+      'https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js',
+    ];
+
+    function startSwagger() {
+      window.ui = SwaggerUIBundle({
+        url: SPEC_URL,
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        docExpansion: 'list',
+        defaultModelsExpandDepth: 1,
+        // La página es solo documentación: la API corre en la máquina de quien
+        // la prueba, así que se deshabilita el botón "Try it out".
+        supportedSubmitMethods: [],
+      });
+    }
+
+    function loadBundle(index) {
+      if (index >= BUNDLE_URLS.length) {
+        document.getElementById('load-error').style.display = 'block';
+        return;
+      }
+      var script = document.createElement('script');
+      script.src = BUNDLE_URLS[index];
+      script.onload = startSwagger;
+      script.onerror = function () { loadBundle(index + 1); };
+      document.body.appendChild(script);
+    }
+
+    loadBundle(0);
+  </script>
+</body>
+
+</html>

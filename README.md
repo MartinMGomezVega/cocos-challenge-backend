@@ -57,7 +57,7 @@ docker compose up -d db-test
 npm run start:dev
 ```
 
-La API queda en `http://localhost:3000`.
+La API queda en `http://localhost:3000`. Para correr la versión compilada: `npm run build` y `npm run start:prod`.
 
 ## Endpoints
 
@@ -68,12 +68,13 @@ La API queda en `http://localhost:3000`.
 | `POST /v1/orders` | Envía una orden de compra o venta, MARKET o LIMIT |
 | `PATCH /v1/orders/:orderId/cancel` | Cancela una orden en estado `NEW` |
 
-Para probarlos hay tres recursos en el repo:
+Para probarlos y consultarlos hay cuatro recursos en el repo:
 
 | Recurso | Ubicación | Cómo usarlo |
 |---|---|---|
 | Colección de Postman | [`postman/cocos-challenge-backend.postman_collection.json`](postman/cocos-challenge-backend.postman_collection.json) | Importar en Postman. La variable `baseUrl` apunta a `http://localhost:3000` |
 | Especificación OpenAPI 3 | [`openapi/openapi.yaml`](openapi/openapi.yaml) | Abrir en [editor.swagger.io](https://editor.swagger.io) o con cualquier visor de OpenAPI |
+| Swagger UI (GitHub Pages) | [`docs/`](docs/) | Abrir [`docs/index.html`](docs/index.html) o publicar desde GitHub Pages |
 | Ejemplos REST Client | [`http/`](http/) | Ejecutar desde el editor con la extensión REST Client |
 
 ### Portfolio
@@ -119,6 +120,8 @@ curl "http://localhost:3000/v1/instruments?query=banco&page=1&limit=10"
 
 ### Enviar una orden
 
+Los `id` de las respuestas son ilustrativos y dependen del estado de la base.
+
 ```bash
 # MARKET por cantidad de acciones
 curl -X POST http://localhost:3000/v1/orders -H "Content-Type: application/json" \
@@ -156,10 +159,10 @@ curl -X POST http://localhost:3000/v1/orders -H "Content-Type: application/json"
 ### Cancelar una orden
 
 ```bash
-curl -X PATCH http://localhost:3000/v1/orders/14/cancel
+curl -X PATCH http://localhost:3000/v1/orders/<orderId>/cancel
 ```
 
-Devuelve la orden con `status` `CANCELLED`. Solo se pueden cancelar órdenes en `NEW`.
+Donde `<orderId>` es el `id` devuelto al crear una orden `LIMIT`. Devuelve la orden con `status` `CANCELLED`. Solo se pueden cancelar órdenes en `NEW`.
 
 ### Errores
 
